@@ -1,0 +1,35 @@
+# Blender MTL File: 'None'
+# Material Count: 3
+
+newmtl USS_GALILEO_mat2
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 2
+map_Kd C:\Users\DCDah\Downloads\r2p64wqo73-Shuttlecraft_USS_Galileo\Shuttlecraft_USS_Galileo\USS_GALILEO_mat2_D.tga
+
+newmtl USS_GALILEO_mat4
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\DCDah\Downloads\r2p64wqo73-Shuttlecraft_USS_Galileo\Shuttlecraft_USS_Galileo\USS_GALILEO_mat4_D.tga
+
+newmtl USS_GALILEO_mat6
+Ns 94.117647
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.100000 0.100000 0.100000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\DCDah\Downloads\r2p64wqo73-Shuttlecraft_USS_Galileo\Shuttlecraft_USS_Galileo\USS_GALILEO_mat6_D.tga

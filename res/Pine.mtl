@@ -1,0 +1,27 @@
+# Blender MTL File: 'Pine.blend'
+# Material Count: 2
+
+newmtl bark
+Ns 19.607843
+Ka 1.000000 1.000000 1.000000
+Kd 0.100771 0.095352 0.078583
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Bump -s 2.000000 2.000000 1.000000 C:\\Users\\DCDah\\Downloads\\bark02.jpg
+map_Kd -s 2.000000 2.000000 1.000000 C:\\Users\\DCDah\\Downloads\\bark02.jpg
+
+newmtl leaves1
+Ns 96.078431
+Ka 1.000000 1.000000 1.000000
+Kd 0.228790 0.365850 0.005745
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 1
+map_Bump -bm 0.500000 C:\\Users\\DCDah\\Downloads\\pine.png
+map_Kd C:\\Users\\DCDah\\Downloads\\pine.png
+map_d C:\\Users\\DCDah\\Downloads\\pine.png
