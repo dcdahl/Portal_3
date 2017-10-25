@@ -9,7 +9,7 @@ import textures.ModelTexture;
 
 public class AnimatedModel
 {
-	private final RawModel model;
+	private final Vao model;
 	
 	private final ModelTexture texure;
 	
@@ -21,7 +21,7 @@ public class AnimatedModel
 	
 
 
-	public AnimatedModel(RawModel model, ModelTexture texure, Joint rootJoint, int jointCount)
+	public AnimatedModel(Vao model, ModelTexture texure, Joint rootJoint, int jointCount)
 	{
 		this.model = model;
 		this.texure = texure;
@@ -30,7 +30,7 @@ public class AnimatedModel
 		this.animator = new Animator();
 		rootJoint.calculateInverseBindTransform(new Matrix4f());
 	}
-	public RawModel getModel()
+	public Vao getModel()
 	{
 		return model;
 	}
