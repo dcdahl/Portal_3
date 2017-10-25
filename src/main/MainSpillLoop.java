@@ -1,14 +1,11 @@
+
 package main;
 
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
-import org.newdawn.slick.opengl.TextureLoader;
-
 import entiies.Camera;
 import entiies.Entity;
 import entiies.Light;
@@ -19,8 +16,6 @@ import render.DisplayManager;
 import render.Loader;
 import render.MasterRenderer;
 import render.OBJLoader;
-import render.EntityRenderer;
-import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
 
