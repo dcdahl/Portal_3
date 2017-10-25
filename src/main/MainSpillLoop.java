@@ -26,6 +26,8 @@ import textures.ModelTexture;
 
 public class MainSpillLoop {
 
+	
+	
 	public static void main(String[] args) {
 		
 		DisplayManager.createDisplay();
@@ -91,7 +93,7 @@ public class MainSpillLoop {
 
 			
 
-			// Lys, flytter lyset litt for å vise at normalene er implementert riktig
+			// Lys, flytter lyset litt for ï¿½ vise at normalene er implementert riktig
 			//lys.x = lys.x - 0.05f;
 			// renderer lyset
 			renderer.render(light, camera);
@@ -112,7 +114,7 @@ public class MainSpillLoop {
 	
 	
 	/*
-	 * Forsøk på å få jorden til å gå i bane rundt solen
+	 * Forsï¿½k pï¿½ ï¿½ fï¿½ jorden til ï¿½ gï¿½ i bane rundt solen
 	 * Work in progress :-)
 	 * */
 	private static Vector3f calcOrbit(Vector3f posOrigin, Vector3f posOrbiter, float degree, int radius){

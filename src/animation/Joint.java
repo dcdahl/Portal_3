@@ -44,7 +44,7 @@ public class Joint
 		return inverseBindTransform;
 	}
 
-	protected void calculateInverseBindTransform(Matrix4f parentBindTransfrom)
+	public void calculateInverseBindTransform(Matrix4f parentBindTransfrom)
 	{
 		Matrix4f bindTransform = Matrix4f.mul(parentBindTransfrom, localBindTransform, null);
 		Matrix4f.invert(bindTransform, inverseBindTransform);
