@@ -30,6 +30,7 @@ public class DisplayManager {
 	
 	
 	
+	
 	// Lager displayet og setter innstillingene til det. 
 	public static void createDisplay(){
 		
