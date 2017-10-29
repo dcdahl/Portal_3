@@ -23,6 +23,7 @@ import render.EntityRenderer;
 import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import toolbox.MousePicker;
 
 public class MainSpillLoop {
 
@@ -86,6 +87,9 @@ public class MainSpillLoop {
         staticObjects.add(player);
         
         Camera camera = new Camera(player);
+        
+        MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
+        
 		
 		while (!Display.isCloseRequested()) {
 			// Aktiverer bevegelse av kamera
@@ -94,8 +98,8 @@ public class MainSpillLoop {
 			// Spillerbevegelse
 			player.move();
     
-			
-
+			picker.update();
+			System.out.println(picker.getCurrentRay());
 			// Rendrer objektene
 			for(Entity entitys:staticObjects)
                 renderer.processEntity(entitys);
