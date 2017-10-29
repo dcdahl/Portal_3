@@ -52,8 +52,8 @@ public class MainSpillLoop {
 		
 		
 		// Building
-		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("solid_grey"));
-		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped2", loader);
+		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
+		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
 		TexturedModel buildingtexturedModel = new TexturedModel(buildingRawModel, buildingTex);
 		Entity building = new Entity(buildingtexturedModel, new Vector3f(95,-2,82),0,0,0,10f);
 		ModelTexture buildingspec = buildingtexturedModel.getTexture();
@@ -61,6 +61,15 @@ public class MainSpillLoop {
 		buildingspec.setReflectivity(0.4f);
 		staticObjects.add(building);
 
+		// Building
+		ModelTexture cubeTex = new ModelTexture(loader.loadTexture("wall_texture"));
+		RawModel cubeRawModel = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel bcubetexturedModel = new TexturedModel(cubeRawModel, cubeTex);
+		Entity cube = new Entity(bcubetexturedModel, new Vector3f(50,5,82),0,0,0,2f);
+		ModelTexture cubespec = bcubetexturedModel.getTexture();
+		cubespec.setShineDamper(500);
+		cubespec.setReflectivity(0.4f);
+		staticObjects.add(cube);
 		
 		// Supermann
 		ModelTexture superTex = new ModelTexture(loader.loadTexture("Superman_Diff"));
