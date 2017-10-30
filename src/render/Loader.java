@@ -42,8 +42,11 @@ public class Loader
 		storeDataInAttributeList(0, 3, positions);
 		storeDataInAttributeList(1, 2, textureCoords);
 		storeDataInAttributeList(2, 3, normals);
+		
+		//Hvis modellen har ledd (skeleton) legg til dette i VAO
 		if(jointIds != null && vertexWeights != null)
 		{
+			//Ledd-id må lagres som intArray
 		storeDataInAttributeList(3, 3, intArrayToFloatArray(jointIds), true);
 		storeDataInAttributeList(4, 3, vertexWeights);
 		}
@@ -100,7 +103,7 @@ public class Loader
 		
 		
 		
-		// Konverterer floatarray til en floatBuffer
+		// Konverterer floatarray til en floatBuffer eller en intArray
 		if(!storeInIntBuffer)
 		floatBuffer = storedataInFloatBuffer(data);
 		else
@@ -118,8 +121,10 @@ public class Loader
 		}
 		else
 		{
+			//Lagrer bufferen i VBOen
 			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, intBuffer, GL15.GL_STATIC_DRAW);
 			
+			//Samme som glVertexAttribPointer, men for intArrays (ledd-id)
 			GL30.glVertexAttribIPointer(attributeNumber, coordinateSize, GL11.GL_INT, coordinateSize*Integer.BYTES, 0);
 			//TODO Store joint-ids in IntBuffer
 		}
@@ -180,6 +185,8 @@ public class Loader
 		GL30.glBindVertexArray(0);
 	}
 	
+	
+	//Konverterer fra floatarray til intarray
 	private int[] floatArrayToIntArray(float[] array)
 	{
 		int[] newArray = new int[array.length];
@@ -191,6 +198,7 @@ public class Loader
 		return newArray;
 	}
 	
+	//Konverterer fra intArray til floatarray
 	private float[] intArrayToFloatArray(int[] array)
 	{
 		System.out.println(array.length);
