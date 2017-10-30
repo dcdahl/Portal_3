@@ -11,7 +11,7 @@ public class AnimatedModel
 {
 	private final Vao model;
 	
-	private final ModelTexture texure;
+	private final ModelTexture texture;
 	
 	private final Joint rootJoint;
 	private final int jointCount;
@@ -21,10 +21,10 @@ public class AnimatedModel
 	
 
 
-	public AnimatedModel(Vao model, ModelTexture texure, Joint rootJoint, int jointCount)
+	public AnimatedModel(Vao model, ModelTexture texture, Joint rootJoint, int jointCount)
 	{
 		this.model = model;
-		this.texure = texure;
+		this.texture = texture;
 		this.rootJoint = rootJoint;
 		this.jointCount = jointCount;
 		this.animator = new Animator();

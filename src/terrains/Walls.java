@@ -23,7 +23,7 @@ public class Walls {
 	}
 
 
-	// Copiert direkte fra ThinMatrix for å generere terrainet
+	// Copiert direkte fra ThinMatrix for ï¿½ generere terrainet
 	 private RawModel generateTerrain(Loader loader){
 	        int count = VERTEX_COUNT * VERTEX_COUNT;
 	        float[] vertices = new float[count * 3];

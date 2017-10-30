@@ -104,14 +104,14 @@ public class OBJLoader {
 		for(int i= 0;i<indices.size();i++)
 			indicesArray[i] = indices.get(i);
 		
-		return loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray);
+		return loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray,null,null);
 
 	}
 	
 	// Denne metoden prosesserer listene med vertexer, texturkoordinater og normaler. 
-	// vertexene, texkordinatene og normalene kommer ikke særlig strukturert i .obj filene, så de må omstruktureres så de er tilpasset til loadern.
-	// Vertex på plass nr. [1] skal ha tekstur på plass nr [1] og normal på [1].. på denne måten er det mer struktur på det. 
-	// Dette gjøres med faces. Et face forteller hvilke vertexer som hører til hvilke texturekoordinater og normaler. 
+	// vertexene, texkordinatene og normalene kommer ikke sï¿½rlig strukturert i .obj filene, sï¿½ de mï¿½ omstruktureres sï¿½ de er tilpasset til loadern.
+	// Vertex pï¿½ plass nr. [1] skal ha tekstur pï¿½ plass nr [1] og normal pï¿½ [1].. pï¿½ denne mï¿½ten er det mer struktur pï¿½ det. 
+	// Dette gjï¿½res med faces. Et face forteller hvilke vertexer som hï¿½rer til hvilke texturekoordinater og normaler. 
 	private static void processVertex(String[] vertexData, List<Integer> indices, 
 			List<Vector2f> textures, List<Vector3f> normals, 
 			float[] textureArray,float[] normalsArray){

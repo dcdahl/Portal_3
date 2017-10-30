@@ -21,8 +21,6 @@ import textures.ModelTexture;
 
 public class MainSpillLoop {
 
-	
-	
 	public static void main(String[] args) {
 		
 		DisplayManager.createDisplay();
@@ -48,15 +46,31 @@ public class MainSpillLoop {
 		//terrains.add(terrain2);
 		
 		
-		
+		// Building
+		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
+		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
+		TexturedModel buildingtexturedModel = new TexturedModel(buildingRawModel, buildingTex);
+		Entity building = new Entity(buildingtexturedModel, new Vector3f(95,-2,82),0,0,0,10f);
+		ModelTexture buildingspec = buildingtexturedModel.getTexture();
+		buildingspec.setShineDamper(500);
+		buildingspec.setReflectivity(0.4f);
+		staticObjects.add(building);
 
-
+		// Building
+		ModelTexture cubeTex = new ModelTexture(loader.loadTexture("wall_texture"));
+		RawModel cubeRawModel = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel bcubetexturedModel = new TexturedModel(cubeRawModel, cubeTex);
+		Entity cube = new Entity(bcubetexturedModel, new Vector3f(50,5,82),0,0,0,2f);
+		ModelTexture cubespec = bcubetexturedModel.getTexture();
+		cubespec.setShineDamper(500);
+		cubespec.setReflectivity(0.4f);
+		staticObjects.add(cube);
 		
 		// Supermann
 		ModelTexture superTex = new ModelTexture(loader.loadTexture("Superman_Diff"));
 		RawModel superRawModel = OBJLoader.loadObjModel("superman", loader);
 		TexturedModel superMantexturedModel = new TexturedModel(superRawModel, superTex);
-		Entity superMan = new Entity(superMantexturedModel, new Vector3f(0,0,50),0,0,0,1f);
+		Entity superMan = new Entity(superMantexturedModel, new Vector3f(0,0,10),0,0,0,10f);
 		ModelTexture superManspec = superMantexturedModel.getTexture();
 		superManspec.setShineDamper(500);
 		superManspec.setReflectivity(0.4f);
@@ -135,3 +149,4 @@ public class MainSpillLoop {
 	
 
 }
+
