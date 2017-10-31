@@ -25,7 +25,6 @@ public class Player extends Entity{
 
 	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
-		// TODO Auto-generated constructor stub
 	}
 
 	
@@ -73,7 +72,7 @@ public class Player extends Entity{
 		else
 			this.currentSpeed = 0;
 			
-		// Høyre og venstre
+		// Hï¿½yre og venstre
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) 
 			this.currentTurnSpeed = -TURN_SPEED;
 		else if(Keyboard.isKeyDown(Keyboard.KEY_A))
