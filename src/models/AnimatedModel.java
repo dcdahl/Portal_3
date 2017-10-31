@@ -19,7 +19,7 @@ public class AnimatedModel extends TexturedModel
 		super(model.getRawModel(), model.getTexture());
 		this.rootJoint = rootJoint;
 		this.jointCount = jointCount;
-		this.animator = new Animator();
+		this.animator = new Animator(this);
 		rootJoint.calculateInverseBindTransform(new Matrix4f());
 	}
 	
