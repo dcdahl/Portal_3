@@ -7,33 +7,22 @@ import animation.Animator;
 import animation.Joint;
 import textures.ModelTexture;
 
-public class AnimatedModel
+public class AnimatedModel extends TexturedModel
 {
-	private final Vao model;
-	
-	private final ModelTexture texture;
-	
 	private final Joint rootJoint;
 	private final int jointCount;
-
 	
 	private final Animator animator;
 	
-
-
-	public AnimatedModel(Vao model, ModelTexture texture, Joint rootJoint, int jointCount)
+	public AnimatedModel( TexturedModel model,Joint rootJoint, int jointCount)
 	{
-		this.model = model;
-		this.texture = texture;
+		super(model.getRawModel(), model.getTexture());
 		this.rootJoint = rootJoint;
 		this.jointCount = jointCount;
 		this.animator = new Animator();
 		rootJoint.calculateInverseBindTransform(new Matrix4f());
 	}
-	public Vao getModel()
-	{
-		return model;
-	}
+	
 	public Joint getRootJoint()
 	{
 		return rootJoint;
