@@ -1,6 +1,9 @@
 package colladaLoader;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -17,6 +20,7 @@ public class MyFile {
 
 	private String path;
 	private String name;
+	private File file;
 
 	public MyFile(String path) {
 		this.path = FILE_SEPARATOR + path;
@@ -47,6 +51,11 @@ public class MyFile {
 		this.name = dirs[dirs.length - 1];
 	}
 
+	public MyFile(File modelFile)
+	{
+		this.file = modelFile;
+	}
+
 	public String getPath() {
 		return path;
 	}
@@ -56,17 +65,18 @@ public class MyFile {
 		return getPath();
 	}
 
-	public InputStream getInputStream() {
-		return Class.class.getResourceAsStream(path);
+	public InputStream getInputStream() throws FileNotFoundException {
+		return new FileInputStream(file);
 	}
 
 	public BufferedReader getReader() throws Exception {
 		try {
+			
 			InputStreamReader isr = new InputStreamReader(getInputStream());
 			BufferedReader reader = new BufferedReader(isr);
 			return reader;
 		} catch (Exception e) {
-			System.err.println("Couldn't get reader for " + path);
+			System.err.println("Couldn't get reader for " + file.getPath());
 			throw e;
 		}
 	}

@@ -9,10 +9,13 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 
+import entiies.AnimatedEntity;
 import entiies.Camera;
 import entiies.Entity;
 import entiies.Light;
+import models.AnimatedModel;
 import models.TexturedModel;
+import shaders.AnimatedShader;
 import shaders.StaticShader;
 import shaders.TerrainShader;
 import terrains.Terrain;
@@ -23,7 +26,9 @@ public class MasterRenderer {
 	private static final float NEAR_PLANE = 0.1f;
 	private static final float FAR_PLANE = 10000f;
 	private StaticShader shader = new StaticShader();
+	private AnimatedShader animatedShader = new AnimatedShader();
 	private EntityRenderer renderer;
+	private SkeletonRenderer skeletonRenderer;
 	private Matrix4f projectionMatrix;
 	
 	private TerrainRenderer terrainRenderer;
@@ -33,31 +38,39 @@ public class MasterRenderer {
 	
 	// Hashmap med liste over de forskjellige entitetene for hver modell.
 	private Map<TexturedModel,List<Entity>> entities = new HashMap<TexturedModel,List<Entity>>();
+	private Map<AnimatedModel,List<AnimatedEntity>> animatedEntities = new HashMap<AnimatedModel,List<AnimatedEntity>>();
 	
 	public MasterRenderer(){
-		// Sørger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
+		// Sï¿½rger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
 		//GL11.glEnable(GL11.GL_CULL_FACE);
 		//GL11.glCullFace(GL11.GL_BACK);
 		
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
+		skeletonRenderer = new SkeletonRenderer(animatedShader, projectionMatrix);
+		
 	}
 	
 	public void render(Light light, Camera camera){
 		prepare();
 		shader.start();
 		shader.loadLight(light);
-		shader.loadViewnMatrix(camera);
+		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
+		animatedShader.start();
+		animatedShader.loadLight(light);
+		animatedShader.loadViewMatrix(camera);
+		skeletonRenderer.render(animatedEntities);
+		animatedShader.stop();
 		terrainShader.start();
 		terrainShader.loadLight(light);
-		terrainShader.loadViewnMatrix(camera);
+		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		terrains.clear();
-		entities.clear(); // må være der for å ikke lage mange hvert frame uten å slette de,
+		entities.clear(); // mï¿½ vï¿½re der for ï¿½ ikke lage mange hvert frame uten ï¿½ slette de,
 	}
 	
 	public void processTerrain(Terrain terrain){
@@ -75,6 +88,19 @@ public class MasterRenderer {
 			List<Entity> newBatch = new ArrayList<Entity>();
 			newBatch.add(entity);
 			entities.put(entityModel, newBatch);
+		}
+	}
+	
+	public void processAnimatedEntity(AnimatedEntity animatedEntity)
+	{
+		AnimatedModel entityModel = animatedEntity.getModel();
+		List<AnimatedEntity> batch = animatedEntities.get(entityModel);
+		if(batch!=null){
+			batch.add(animatedEntity);
+		}else{
+			List<AnimatedEntity> newBatch = new ArrayList<AnimatedEntity>();
+			newBatch.add(animatedEntity);
+			animatedEntities.put(entityModel, newBatch);
 		}
 	}
 	
