@@ -26,6 +26,7 @@ public class AnimatedShader extends ShaderProgram
 	public AnimatedShader()
 	{
 		super(VERTEX_FILE, FRAGMENT_FILE);
+	
 	}
 
 	@Override
@@ -39,8 +40,8 @@ public class AnimatedShader extends ShaderProgram
 		//location_jointTransforms = super.getUniformLocation("jointTransforms");
 		
 		
-		//location_shineDamper = super.getUniformLocation("shineDamper");
-		//location_reflectivity = super.getUniformLocation("reflectivity");
+		location_shineDamper = super.getUniformLocation("shineDamper");
+		location_reflectivity = super.getUniformLocation("reflectivity");
 	}
 
 	@Override

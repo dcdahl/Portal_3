@@ -121,7 +121,7 @@ public class MainSpillLoop
 		SkeletonData skeletonData = animatedModelData.getJointsData();
 		AnimatedModel animatedModel = loadEntity(animatedModelData, texModel);
 		Animation animation = loadAnimation(animationData);
-		AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, camera.getPosition(), 0, 0, 0, 0.2f);
+		AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 10), 0, 0, 0, 0.2f);
 		
 		animatedObjects.add(newAnimatedEntity);
 		

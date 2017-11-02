@@ -70,7 +70,8 @@ public class MasterRenderer {
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		terrains.clear();
-		entities.clear(); // m� v�re der for � ikke lage mange hvert frame uten � slette de,
+		entities.clear();
+		animatedEntities.clear();// m� v�re der for � ikke lage mange hvert frame uten � slette de,
 	}
 	
 	public void processTerrain(Terrain terrain){
