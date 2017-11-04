@@ -39,6 +39,8 @@ import render.EntityRenderer;
 import shaders.StaticShader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 import toolbox.MousePicker;
 import animation.*;
 
@@ -46,6 +48,9 @@ public class MainSpillLoop
 {
 
 	private static final int MAX_WEIGHTS = 3;
+	private static TerrainTexturePack texturePack;
+	private static TerrainTexture blendMap;
+	private static float lumen = 1.5f;
 
 	public static void main(String[] args)
 	{
@@ -59,11 +64,12 @@ public class MainSpillLoop
 		List<AnimatedEntity> animatedObjects = new ArrayList<AnimatedEntity>();
 
 		Vector3f lys = new Vector3f(100, 10, 120);
-		Light light = new Light(lys, new Vector3f(1, 1, 1));
+		Light light = new Light(lys, new Vector3f(lumen, lumen, lumen));
 
 		// Terreng
-		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+		loadTerrainPack(loader);
+		Terrain terrain = new Terrain(0, 0, loader,texturePack,blendMap, "highttest2" );
+		//Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
 		terrains.add(terrain);
 		// terrains.add(terrain2);
 
@@ -133,7 +139,7 @@ public class MainSpillLoop
 			camera.move();
 
 			// Spillerbevegelse
-			player.move();
+			player.move(terrain);
 
 			picker.update();
 			System.out.println(picker.getCurrentRay());
@@ -164,6 +170,19 @@ public class MainSpillLoop
 
 		DisplayManager.closeDisplay();
 
+	}
+
+	private static void loadTerrainPack(Loader loader) {
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/grass")); // Svart
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud2")); // Rød
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/grassFlowers")); // Grønn
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/test")); // Blå
+		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		
+		
+		
+		blendMap = new TerrainTexture(loader.loadTexture("terrain/blendMap"));
+		
 	}
 
 	/*
