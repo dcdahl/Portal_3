@@ -187,10 +187,10 @@ public class MainSpillLoop
 			
 //**********************MIRROR SHIT ********************************************************			
 			fbos.bindReflectionFrameBuffer();
-			xd.setPosition(new Vector3f(water.getX(), 1f, water.getZ()));
+			xd.setPosition(new Vector3f(water.getX(), 1f, water.getZ()+18));
 			xd.setYaw(playerHead.getYaw());
 			
-			xd.setPitch(-25);
+			xd.setPitch(0);
 			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
