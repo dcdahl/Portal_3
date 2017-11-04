@@ -63,7 +63,7 @@ public class MainSpillLoop
 
 		// Terreng
 		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
+		//Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
 		terrains.add(terrain);
 		// terrains.add(terrain2);
 
@@ -97,18 +97,10 @@ public class MainSpillLoop
 		superManspec.setReflectivity(0.4f);
 		// staticObjects.add(superMan);
 
-		Player player = new Player(superMantexturedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
-		staticObjects.add(player);
-
-		Camera camera = new Camera(player);
-
-		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
-
-		
-		
 		// Animatert figur
 		ModelTexture animatedTex = new ModelTexture(loader.loadTexture("diffuse"));
-
+animatedTex.setShineDamper(500);
+animatedTex.setReflectivity(0.4f);
 		File model = new File("res/model.dae");
 
 		MyFile modelFile = new MyFile(model);
@@ -118,15 +110,30 @@ public class MainSpillLoop
 		RawModel rawModel = loader.loadToVAO(mesh.getVertices(), mesh.getIndices(), mesh.getTextureCoords(),
 				mesh.getNormals(), mesh.getJointIds(), mesh.getVertexWeights());
 		TexturedModel texModel = new TexturedModel(rawModel, animatedTex);
-		SkeletonData skeletonData = animatedModelData.getJointsData();
 		AnimatedModel animatedModel = loadEntity(animatedModelData, texModel);
 		Animation animation = loadAnimation(animationData);
-		AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 10), 0, 0, 0, 0.2f);
-		
-		animatedObjects.add(newAnimatedEntity);
-		
 		Animator animator = new Animator(animatedModel);
 		animator.doAnimation(animation);
+		
+		AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+		//nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+		//AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+		animatedObjects.add(newAnimatedEntity);
+		//animatedObjects.add(newAnimatedEntity2);
+		//animatedObjects.add(newAnimatedEntity3);
+		
+		Player player = new Player(texModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+		staticObjects.add(player);
+
+		Camera camera = new Camera(player);
+
+		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
+
+		
+		
+
+		
+		
 		while (!Display.isCloseRequested())
 		{
 			// Aktiverer bevegelse av kamera
@@ -136,19 +143,20 @@ public class MainSpillLoop
 			player.move();
 
 			picker.update();
-			System.out.println(picker.getCurrentRay());
+			//System.out.println(picker.getCurrentRay());
 			animator.update();
 			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
 
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
 			// Render terreng
 			for (Terrain terr : terrains)
 				renderer.processTerrain(terr);
 
-			for (AnimatedEntity animatedEntity : animatedObjects)
-				renderer.processAnimatedEntity(animatedEntity);
+
 
 			// Lys, flytter lyset litt for � vise at normalene er implementert
 			// riktig

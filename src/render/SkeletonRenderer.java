@@ -46,6 +46,7 @@ public class SkeletonRenderer
 			for (AnimatedEntity entity : batch)
 			{
 				prepareInstance(entity);
+				GL13.glActiveTexture(GL13.GL_TEXTURE0);
 				GL11.glDrawElements(GL11.GL_TRIANGLES, model.getRawModel().getVertextCount(), GL11.GL_UNSIGNED_INT, 0);
 			}
 			unbindTexturedModel();
