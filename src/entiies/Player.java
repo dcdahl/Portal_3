@@ -5,11 +5,14 @@ import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
+import animation.Animation;
+import animation.Animator;
+import models.AnimatedModel;
 import models.TexturedModel;
 import render.DisplayManager;
 import terrains.Terrain;
 
-public class Player extends Entity{
+public class Player extends AnimatedEntity{
 	
 	
 	private static final float RUN_SPEED = 20;
@@ -23,8 +26,17 @@ public class Player extends Entity{
 	private float upwardsSpeed = 0;
 	private boolean isInAir = false;
 	
-
-	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	Animation animation;
+	Animator animator;
+	
+	
+	
+	public Player(AnimatedModel model, Animator animator, Animation animation, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+		super(model, position, rotX, rotY, rotZ, scale);
+		this.animator = animator;
+		this.animation = animation;
+	}
+	public Player(AnimatedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 	}
 
@@ -90,7 +102,9 @@ public class Player extends Entity{
 	}
 	
 	
-	
+	public Animator getAnimator() {
+		return animator;
+	}
 	
 	
 }

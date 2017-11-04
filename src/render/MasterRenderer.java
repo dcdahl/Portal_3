@@ -8,6 +8,7 @@ import java.util.Map;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
 
 import entiies.AnimatedEntity;
 import entiies.Camera;
@@ -52,9 +53,10 @@ public class MasterRenderer {
 		
 	}
 	
-	public void render(Light light, Camera camera){
+	public void render(Light light, Camera camera, Vector4f clipPlane){
 		prepare();
 		shader.start();
+		shader.loadClipPlane(clipPlane);
 		shader.loadLight(light);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);

@@ -10,8 +10,11 @@ import java.util.Map;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import colladaLoader.AnimationLoader;
@@ -43,6 +46,10 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 import toolbox.MousePicker;
+import water.WaterFrameBuffers;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 import animation.*;
 
 public class MainSpillLoop
@@ -104,6 +111,29 @@ public class MainSpillLoop
 		superManspec.setReflectivity(0.4f);
 		// staticObjects.add(superMan);
 
+//		SourcePortal 
+		ModelTexture sourcePortalTexture = new ModelTexture(loader.loadTexture("orange"));
+		RawModel sourcePortalRaw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel sourcePortalTexturedModel = new TexturedModel(sourcePortalRaw, sourcePortalTexture);
+		Entity sourcePortal = new Entity(sourcePortalTexturedModel, new Vector3f(85,0,110), 0, 0, 0, 1f);
+		staticObjects.add(sourcePortal);
+		
+		ModelTexture sourcePortalTexture2 = new ModelTexture(loader.loadTexture("blueXD"));
+		RawModel sourcePortalRaw2 = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel sourcePortalTexturedModel2 = new TexturedModel(sourcePortalRaw2, sourcePortalTexture2);
+		Entity sourcePortal2 = new Entity(sourcePortalTexturedModel2, new Vector3f(95,0,100), 0, 0, 0, 4f);
+		staticObjects.add(sourcePortal2);
+		
+		
+		//********************WATER************************************************************************
+		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), fbos);
+		List<WaterTile> waters = new ArrayList<WaterTile>();
+		WaterTile water = new WaterTile(85, 125, 0);
+		waters.add(water);
+		
 		// Animatert figur
 		ModelTexture animatedTex = new ModelTexture(loader.loadTexture("diffuse"));
 		animatedTex.setShineDamper(500);
@@ -122,24 +152,23 @@ public class MainSpillLoop
 		Animator animator = new Animator(animatedModel);
 		animator.doAnimation(animation);
 		
-		AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
-		//nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
-		//AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
-		animatedObjects.add(newAnimatedEntity);
-		//animatedObjects.add(newAnimatedEntity2);
-		//animatedObjects.add(newAnimatedEntity3);
-		
-		Player player = new Player(texModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
-		staticObjects.add(player);
-
+		//AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+				//nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+				//AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+				//animatedObjects.add(newAnimatedEntity);
+				//animatedObjects.add(newAnimatedEntity2);
+				//animatedObjects.add(newAnimatedEntity3);
+				
+		Player player = new Player(animatedModel,animator,animation , new Vector3f(100, 0, 100), 0, 0, 0, 1);
+		animatedObjects.add(player);
 		Camera camera = new Camera(player);
 
+		Camera xd = new Camera();
+		Camera playerHead = new Camera();
+		playerHead.setPitch(10f);		
+		
 		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
 
-		
-		
-
-		
 		
 		while (!Display.isCloseRequested())
 		{
@@ -151,29 +180,52 @@ public class MainSpillLoop
 
 			picker.update();
 			//System.out.println(picker.getCurrentRay());
-			animator.update();
+			player.getAnimator().update();
+			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+			playerHead.setPosition(new Vector3f(player.getPosition()));
+			
+			
+//**********************MIRROR SHIT ********************************************************			
+			fbos.bindReflectionFrameBuffer();
+			xd.setPosition(new Vector3f(water.getX(), 1f, water.getZ()));
+			xd.setYaw(playerHead.getYaw());
+			
+			xd.setPitch(-25);
+			
+			// Rendrer objektene
+			for (Entity entitys : staticObjects)
+				renderer.processEntity(entitys);
+			// Render terreng
+			for (Terrain terr : terrains)
+				renderer.processTerrain(terr);
+
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
+			
+			renderer.render(light, xd, new Vector4f(1, 0, 0, water.getHeight()));
+			xd.invertPitch(); 
+			fbos.unbindCurrentFrameBuffer();
+//*******************************************************************************************
+			// TODO clipplane for terrain 
 			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
 
-			for (AnimatedEntity animatedEntity : animatedObjects)
-				renderer.processAnimatedEntity(animatedEntity);
 			// Render terreng
 			for (Terrain terr : terrains)
 				renderer.processTerrain(terr);
 
-
-
-			// Lys, flytter lyset litt for � vise at normalene er implementert
-			// riktig
-			// lys.x = lys.x - 0.05f;
-			// renderer lyset
-			renderer.render(light, camera);
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
+			
+			renderer.render(light, camera, new Vector4f(0, -1, 0, 150000000));
+			waterRenderer.render(waters, camera);
 
 			DisplayManager.updateDisplay();
 		}
-
+		fbos.cleanUp();
+		waterShader.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 

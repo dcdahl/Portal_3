@@ -30,6 +30,11 @@ public class Camera {
 		this.player = player;
 	}
 	
+	public Camera() {}
+	
+	public void invertPitch() {
+		this.pitch  = -pitch;
+	}
 	
 	public void move(){
 		calculateZoom();
