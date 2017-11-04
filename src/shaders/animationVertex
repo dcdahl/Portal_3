@@ -29,6 +29,7 @@ uniform vec3 lightPosition;
 void main(void){
 	vec4 totalLocalPosition = vec4(0.0);
 	vec4 totalNormal = vec4(0.0);
+	
 	for(int i=0;i<MAX_WEIGHTS;i++){
 		mat4 jointTransform = jointTransforms[jointIndicies[i]];
 		vec4 posePosition = jointTransform * vec4(position,1.0);
@@ -39,13 +40,15 @@ void main(void){
 	}
 
 	
-	vec4 worldPosition = transformationMatrix * vec4(position,1.0);
-	gl_Position = projectionMatrix * viewMatrix * totalLocalPosition; 
+	vec4 worldPosition = transformationMatrix * totalLocalPosition;
+	gl_Position = projectionMatrix * viewMatrix * worldPosition;// * vec4(totalLocalPosition.xyz,1.0);
 	pass_textureCoords = textureCoords;
 	
-	surfaceNormal = (transformationMatrix * vec4(normal,0.0)).xyz * totalLocalPosition.xyz;
+	vec3 newNormal = vec3(transformationMatrix * totalNormal);
+	surfaceNormal = newNormal; // * totalLocalPosition.xyz;
 	toLightVector = lightPosition - worldPosition.xyz;
 	
 	// Spectular lys (skinn)
 	toCameraVector = (inverse(viewMatrix) * vec4(0.0,0.0,0.0,1.0)).xyz - worldPosition.xyz;
 }
+

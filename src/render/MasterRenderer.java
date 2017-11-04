@@ -59,16 +59,20 @@ public class MasterRenderer {
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
-		animatedShader.start();
-		animatedShader.loadLight(light);
-		animatedShader.loadViewMatrix(camera);
-		skeletonRenderer.render(animatedEntities);
-		animatedShader.stop();
+		
 		terrainShader.start();
 		terrainShader.loadLight(light);
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
+		
+		animatedShader.start();
+		animatedShader.loadLight(light);
+		animatedShader.loadViewMatrix(camera);
+		skeletonRenderer.render(animatedEntities);
+		animatedShader.stop();
+		
+		
 		terrains.clear();
 		entities.clear();
 		animatedEntities.clear();// m� v�re der for � ikke lage mange hvert frame uten � slette de,
@@ -135,6 +139,7 @@ public class MasterRenderer {
 	public void cleanUp(){
 		shader.cleanUp();
 		terrainShader.cleanUp();
+		animatedShader.cleanUp();
 	}
 	
 }
