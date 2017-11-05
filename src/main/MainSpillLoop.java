@@ -70,10 +70,9 @@ public class MainSpillLoop
 		List<Entity> staticObjects = new ArrayList<Entity>();
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		List<AnimatedEntity> animatedObjects = new ArrayList<AnimatedEntity>();
+		List<Light> lights = createLights(); 
 
-		Vector3f lys = new Vector3f(100, 10, 120);
-		Light light = new Light(lys, new Vector3f(lumen, lumen, lumen));
-
+		
 		// Terreng
 				loadTerrainPack(loader);
 				Terrain terrain = new Terrain(0, 0, loader,texturePack,blendMap, "highttest2" );
@@ -202,7 +201,7 @@ public class MainSpillLoop
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
 			
-			renderer.render(light, xd, new Vector4f(1, 0, 0, water.getHeight()));
+			renderer.render(lights, xd, new Vector4f(1, 0, 0, water.getHeight()));
 			xd.invertPitch(); 
 			fbos.unbindCurrentFrameBuffer();
 //*******************************************************************************************
@@ -219,7 +218,7 @@ public class MainSpillLoop
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
 			
-			renderer.render(light, camera, new Vector4f(0, -1, 0, 150000000));
+			renderer.render(lights, camera, new Vector4f(0, -1, 0, 150000000));
 			waterRenderer.render(waters, camera);
 
 			DisplayManager.updateDisplay();
@@ -332,5 +331,21 @@ public class MainSpillLoop
 		
 	}
 
+	private static List<Light> createLights(){
+		List<Light> lights = new ArrayList<Light>();
+		
+		// 						Posisjon						Farge og styrke
+		lights.add(new Light(new Vector3f(100, 10, 120), new Vector3f(lumen, 0, lumen)));
+		lights.add(new Light(new Vector3f(200, 10, 500), new Vector3f(1, 0, 0)));
+		lights.add(new Light(new Vector3f(300, 10, 800), new Vector3f(0, 1, 0)));
+		
+		
+		return lights;
+		
+		
+		
+		
+		
+	}
 }
 

@@ -53,23 +53,23 @@ public class MasterRenderer {
 		
 	}
 	
-	public void render(Light light, Camera camera, Vector4f clipPlane){
+	public void render(List<Light> lights, Camera camera, Vector4f clipPlane){
 		prepare();
 		shader.start();
 		shader.loadClipPlane(clipPlane);
-		shader.loadLight(light);
+		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
 		renderer.render(entities);
 		shader.stop();
 		
 		terrainShader.start();
-		terrainShader.loadLight(light);
+		terrainShader.loadLights(lights);
 		terrainShader.loadViewMatrix(camera);
 		terrainRenderer.render(terrains);
 		terrainShader.stop();
 		
 		animatedShader.start();
-		animatedShader.loadLight(light);
+		animatedShader.loadLights(lights);
 		animatedShader.loadViewMatrix(camera);
 		skeletonRenderer.render(animatedEntities);
 		animatedShader.stop();
