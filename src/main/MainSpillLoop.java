@@ -333,12 +333,23 @@ public class MainSpillLoop
 
 	private static List<Light> createLights(){
 		List<Light> lights = new ArrayList<Light>();
+		Vector3f attenuation = new Vector3f(1f, 0.01f, 0.002f);
 		
-		// 						Posisjon						Farge og styrke
-		lights.add(new Light(new Vector3f(100, 10, 120), new Vector3f(lumen, 0, lumen)));
-		lights.add(new Light(new Vector3f(200, 10, 500), new Vector3f(1, 0, 0)));
-		lights.add(new Light(new Vector3f(300, 10, 800), new Vector3f(0, 1, 0)));
+		float lysstyrke = 0.4f;
 		
+		
+		
+		// Posisjoner i huset
+		Vector3f en  = new Vector3f(50, 10, 5);
+		Vector3f to  = new Vector3f(100, 10, 50);
+		Vector3f tre = new Vector3f(150, 10, 50);
+		
+		
+		// 						Posisjon / Farge /  Styrke
+		lights.add(new Light(new Vector3f(500, 1000, -7000), Light.HVIT));
+		lights.add(new Light(en, Light.ROD , Light.SVAK));
+		lights.add(new Light(to, Light.GUL , Light.MIDDELS));
+		lights.add(new Light(tre, Light.ORANGE , Light.STERK));
 		
 		return lights;
 		
