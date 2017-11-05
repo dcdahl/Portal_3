@@ -58,7 +58,7 @@ public class MainSpillLoop
 	private static final int MAX_WEIGHTS = 3;
 	private static TerrainTexturePack texturePack;
 	private static TerrainTexture blendMap;
-	private static float lumen = 1.5f;
+	private static float lumen = 100.5f;
 
 	public static void main(String[] args)
 	{
@@ -110,29 +110,56 @@ public class MainSpillLoop
 		superManspec.setReflectivity(0.4f);
 		// staticObjects.add(superMan);
 
-//		SourcePortal 
-		ModelTexture sourcePortalTexture = new ModelTexture(loader.loadTexture("orange"));
-		RawModel sourcePortalRaw = OBJLoader.loadObjModel("cube", loader);
-		TexturedModel sourcePortalTexturedModel = new TexturedModel(sourcePortalRaw, sourcePortalTexture);
-		Entity sourcePortal = new Entity(sourcePortalTexturedModel, new Vector3f(85,0,110), 0, 0, 0, 1f);
-		staticObjects.add(sourcePortal);
+//*************** Objects in front of sourcePortal *************************************************
+		ModelTexture kasse1Texture = new ModelTexture(loader.loadTexture("orange"));
+		RawModel kasse1Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse1TexturedModel = new TexturedModel(kasse1Raw, kasse1Texture);
+		Entity kasse1 = new Entity(kasse1TexturedModel, new Vector3f(85,0,110), 0, 0, 0, 1f);
+		staticObjects.add(kasse1);
 		
-		ModelTexture sourcePortalTexture2 = new ModelTexture(loader.loadTexture("blueXD"));
-		RawModel sourcePortalRaw2 = OBJLoader.loadObjModel("cube", loader);
-		TexturedModel sourcePortalTexturedModel2 = new TexturedModel(sourcePortalRaw2, sourcePortalTexture2);
-		Entity sourcePortal2 = new Entity(sourcePortalTexturedModel2, new Vector3f(95,0,100), 0, 0, 0, 4f);
-		staticObjects.add(sourcePortal2);
+		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
+		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse1Texture);
+		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(95,0,100), 0, 0, 0, 4f);
+		staticObjects.add(kasse2);
+//*************** Objects in front of destination portal ******************************************************		
+		ModelTexture kasse3Texture = new ModelTexture(loader.loadTexture("Moon"));
+		RawModel kasse3Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse3TexturedModel = new TexturedModel(kasse3Raw, kasse3Texture);
+		Entity kasse3 = new Entity(kasse3TexturedModel, new Vector3f(165,0,20), 0, 0, 0, 3f);
+		staticObjects.add(kasse3);
+		
+		ModelTexture kasse4Texture = new ModelTexture(loader.loadTexture("jorda"));
+		RawModel kasse4Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse4TexturedModel = new TexturedModel(kasse4Raw, kasse4Texture);
+		Entity kasse4 = new Entity(kasse4TexturedModel, new Vector3f(195,0,4), 0, 0, 0, 6f);
+		staticObjects.add(kasse4);
+		
+		ModelTexture kasse5Texture = new ModelTexture(loader.loadTexture("jorda"));
+		RawModel kasse5Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse5TexturedModel = new TexturedModel(kasse5Raw, kasse5Texture);
+		Entity kasse5 = new Entity(kasse5TexturedModel, new Vector3f(175,0,30), 0, 1, 0, 1f);
+		staticObjects.add(kasse5);
+		
+
 		
 		
-		//********************WATER************************************************************************
-		WaterFrameBuffers fbos = new WaterFrameBuffers();
-		
+//********************WATER AKA PORTALS N STUFF************************************************************************
+		WaterFrameBuffers fbos = new WaterFrameBuffers();		
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), fbos);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile water = new WaterTile(85, 125, 0);
-		waters.add(water);
+		WaterTile sourcePortal = new WaterTile(85, 125, 0);
+		waters.add(sourcePortal);
 		
+		
+		WaterFrameBuffers ok = new WaterFrameBuffers();
+		WaterShader okShader = new WaterShader();
+		WaterRenderer okRenderer = new WaterRenderer(loader, okShader, renderer.getProjectionMatrix(), ok);
+		List<WaterTile> oks = new ArrayList<WaterTile>();
+		WaterTile destPortal = new WaterTile(180, 50, 0);
+		oks.add(destPortal);
+//**************************************************************************************************
 		// Animatert figur
 		ModelTexture animatedTex = new ModelTexture(loader.loadTexture("diffuse"));
 		animatedTex.setShineDamper(500);
@@ -161,11 +188,11 @@ public class MainSpillLoop
 		Player player = new Player(animatedModel,animator,animation , new Vector3f(100, 0, 100), 0, 0, 0, 1);
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
-
-		Camera xd = new Camera();
-		Camera playerHead = new Camera();
-		playerHead.setPitch(10f);		
-		
+//********** PORTAL CAMERAS *************************************************
+		Camera sourcePortalCamera = new Camera();
+		Camera destinationPortalCamera = new Camera();
+				
+//***************************************************************************		
 		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
 
 		
@@ -181,15 +208,12 @@ public class MainSpillLoop
 			//System.out.println(picker.getCurrentRay());
 			player.getAnimator().update();
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
-			playerHead.setPosition(new Vector3f(player.getPosition()));
 			
-			
-//**********************MIRROR SHIT ********************************************************			
+//**********************PORTALS ********************************************************			
 			fbos.bindReflectionFrameBuffer();
-			xd.setPosition(new Vector3f(water.getX(), 1f, water.getZ()+18));
-			xd.setYaw(playerHead.getYaw());
 			
-			xd.setPitch(0);
+			destinationPortalCamera.setPosition(new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10));
+			destinationPortalCamera.setPitch(0);
 			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
@@ -201,9 +225,33 @@ public class MainSpillLoop
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
 			
-			renderer.render(lights, xd, new Vector4f(1, 0, 0, water.getHeight()));
-			xd.invertPitch(); 
+			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, sourcePortal.getHeight()));	
+//			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));
+//			xd.invertPitch(); 
 			fbos.unbindCurrentFrameBuffer();
+			
+			
+			ok.bindReflectionFrameBuffer();
+			sourcePortalCamera.setPosition(new Vector3f(sourcePortal.getX(), 1f, sourcePortal.getZ() + 10));
+			sourcePortalCamera.setPitch(0);
+	
+			// Rendrer objektene
+			for (Entity entitys : staticObjects)
+				renderer.processEntity(entitys);
+			// Render terreng
+			for (Terrain terr : terrains)
+				renderer.processTerrain(terr);
+
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
+			
+			renderer.render(lights, sourcePortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));	
+//			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));
+//			xd.invertPitch(); 
+			ok.unbindCurrentFrameBuffer();
+
+			
+		
 //*******************************************************************************************
 			// TODO clipplane for terrain 
 			
@@ -220,10 +268,12 @@ public class MainSpillLoop
 			
 			renderer.render(lights, camera, new Vector4f(0, -1, 0, 150000000));
 			waterRenderer.render(waters, camera);
+			okRenderer.render(oks, camera);
 
 			DisplayManager.updateDisplay();
 		}
 		fbos.cleanUp();
+		ok.cleanUp();
 		waterShader.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();

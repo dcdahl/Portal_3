@@ -33,7 +33,7 @@ public abstract class ShaderProgram {
 	        programID = GL20.glCreateProgram();
 	        
 	        // Henger shaderne på programmet
-	        GL20.glAttachShader(programID, vertexShaderID);
+	        GL20.glAttachShader(programID, vertexShaderID); 
 	        GL20.glAttachShader(programID, fragmentShaderID); 
 	        
 	        // linker inputen til shader programene til en av attributtene til VAOene

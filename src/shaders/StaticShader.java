@@ -27,7 +27,7 @@ public class StaticShader extends ShaderProgram{
 	private int location_reflectivity;
 	private int location_plane;
 	
-	
+	 
 	public StaticShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
 		
