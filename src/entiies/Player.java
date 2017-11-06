@@ -106,5 +106,10 @@ public class Player extends AnimatedEntity{
 		return animator;
 	}
 	
+	public boolean isMoving()
+	{
+		return currentSpeed > 0 || currentTurnSpeed > 0;
+	}
+	
 	
 }

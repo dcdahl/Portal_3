@@ -45,6 +45,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import toolbox.Maths;
 import toolbox.MousePicker;
 import water.WaterFrameBuffers;
 import water.WaterRenderer;
@@ -198,23 +199,34 @@ public class MainSpillLoop
 		
 		while (!Display.isCloseRequested())
 		{
+			//Vector3f old = camera.getPosition();
 			// Aktiverer bevegelse av kamera
 			camera.move();
+			
+//Vector3f newVec = camera.getPosition();
+
 
 			// Spillerbevegelse
 			player.move(terrain);
 
 			picker.update();
 			//System.out.println(picker.getCurrentRay());
+			if(player.isMoving())
 			player.getAnimator().update();
+			else
+			{
+				player.getAnimator().resetAnimation();
+			}
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 			
 //**********************PORTALS ********************************************************			
 			fbos.bindReflectionFrameBuffer();
-			
-			destinationPortalCamera.setPosition(new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10));
+			Vector3f entryPortalPosition = new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10);
+			//Vector3f change = Maths.getDifferenceVector(old, newVec);
+			//System.out.println(change);
+			destinationPortalCamera.setPosition(entryPortalPosition);
 			destinationPortalCamera.setPitch(0);
-			
+
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
@@ -232,6 +244,7 @@ public class MainSpillLoop
 			
 			
 			ok.bindReflectionFrameBuffer();
+			
 			sourcePortalCamera.setPosition(new Vector3f(sourcePortal.getX(), 1f, sourcePortal.getZ() + 10));
 			sourcePortalCamera.setPitch(0);
 	
@@ -267,7 +280,11 @@ public class MainSpillLoop
 				renderer.processAnimatedEntity(animatedEntity);
 			
 			renderer.render(lights, camera, new Vector4f(0, -1, 0, 150000000));
+			
 			waterRenderer.render(waters, camera);
+			
+			
+			
 			okRenderer.render(oks, camera);
 
 			DisplayManager.updateDisplay();
@@ -370,9 +387,9 @@ public class MainSpillLoop
 	
 	private static void loadTerrainPack(Loader loader) {
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/grass")); // Svart
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud2")); // Rød
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/grassFlowers")); // Grønn
-		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/test")); // Blå
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud2")); // Rï¿½d
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("terrain/grassFlowers")); // Grï¿½nn
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("terrain/test")); // Blï¿½
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 		
 		
@@ -408,5 +425,6 @@ public class MainSpillLoop
 		
 		
 	}
+
 }
 

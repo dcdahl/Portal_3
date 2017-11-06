@@ -220,5 +220,10 @@ public class Animator {
 		}
 		return currentPose;
 	}
+	
+	public void resetAnimation()
+	{
+		animationTime = 0;
+	}
 
 }
