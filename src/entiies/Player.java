@@ -79,7 +79,9 @@ public class Player extends AnimatedEntity{
 	private void checkInputs() {
 		
 		// Frem og tilbake
-		if(Keyboard.isKeyDown(Keyboard.KEY_W)) 
+		if(Keyboard.isKeyDown(Keyboard.KEY_W) && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) 
+			this.currentSpeed = RUN_SPEED * 2;
+		else if(Keyboard.isKeyDown(Keyboard.KEY_W)) 
 			this.currentSpeed = RUN_SPEED;
 		else if (Keyboard.isKeyDown(Keyboard.KEY_S))
 			this.currentSpeed = -RUN_SPEED;
