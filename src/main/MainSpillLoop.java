@@ -72,7 +72,7 @@ public class MainSpillLoop
 		
 		// Terreng
 				loadTerrainPack(loader);
-				Terrain terrain = new Terrain(0, 0, loader,texturePack,blendMap, "highttest2" );
+				Terrain terrain = new Terrain(0, 0, loader,texturePack,blendMap, "SluJkrJ" );
 				//Terrain terrain2 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grass")));
 				terrains.add(terrain);
 				// terrains.add(terrain2);
