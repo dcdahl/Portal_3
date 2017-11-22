@@ -4,19 +4,23 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import animation.Quaternion;
+import water.WaterTile;
 
 public class PortalCamera extends Camera{
 
 	private Vector3f position = new Vector3f(0, 5, 0);
+	private Vector3f cameraNormal;
 	private float pitch = 10, yaw = 0, roll;
-	private Matrix4f view;
 
 	public PortalCamera(Vector3f position) {
 		this.position = position;
 	}
 	
-	public PortalCamera()
-	{}
+	
+	public PortalCamera(WaterTile tile)
+	{
+		cameraNormal = tile.getNormalVector();
+	}
 
 	public void rotate(float angle) {
 	/*
@@ -47,13 +51,14 @@ public class PortalCamera extends Camera{
 	    setPosition(Vector3f.add(getPosition(), newPosition, null));
 	    */
 	}
-	
-	public Matrix4f getView() {
-		return view;
-	}
 
 	public Vector3f getPosition() {
 		return position;
+	}
+	
+	public Vector3f getCameraNormal()
+	{
+		return cameraNormal;
 	}
 
 	public float getPitch() {

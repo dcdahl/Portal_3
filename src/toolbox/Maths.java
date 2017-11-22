@@ -1,5 +1,6 @@
 package toolbox;
 
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
@@ -42,14 +43,6 @@ public class Maths
 		Matrix4f.translate(negativeCameraPos, viewMatrix, viewMatrix);
 		return viewMatrix;
 	}
-//Fungerer ikke
-	public static Vector3f getDifferenceVector(Vector3f oldPosition, Vector3f newPosition)
-	{
-		Vector3f translation = new Vector3f();
-		Vector3f.sub(oldPosition, newPosition, translation);
-		return (Vector3f) translation.normalise();
-
-	}
 
 	// Kopiert rett fra ThinMatrix
 	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos)
@@ -59,6 +52,23 @@ public class Maths
 		float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
 		float l3 = 1.0f - l1 - l2;
 		return l1 * p1.y + l2 * p2.y + l3 * p3.y;
+	}
+	
+	public static Matrix3f createMatrix3fFromVector3f(Vector3f vector)
+	{
+		Matrix3f newMatrix = new Matrix3f();
+		
+		newMatrix.m00 = 0;
+		newMatrix.m01 = -vector.z;
+		newMatrix.m02 = vector.y;
+		newMatrix.m10 = vector.z;
+		newMatrix.m11 = 0;
+		newMatrix.m12 = -vector.x;
+		newMatrix.m20 = -vector.y;
+		newMatrix.m21 = vector.x;
+		newMatrix.m22 = 0;
+		
+		return newMatrix;
 	}
 
 }

@@ -12,6 +12,7 @@ import java.util.Random;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
+import org.lwjgl.util.vector.Matrix3f;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
@@ -186,8 +187,8 @@ public class MainSpillLoop {
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
 		// ********** PORTAL CAMERAS *************************************************
-		PortalCamera sourcePortalCamera = new PortalCamera();
-		PortalCamera destinationPortalCamera = new PortalCamera();
+		PortalCamera sourcePortalCamera = new PortalCamera(destPortal);
+		PortalCamera destinationPortalCamera = new PortalCamera(sourcePortal);
 
 		// ***************************************************************************
 		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
@@ -218,6 +219,8 @@ public class MainSpillLoop {
 			float angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
 			//change.normalise();
 
+			
+			//entryPortalPosition = SetPortalPosition(camera,destinationPortalCamera.getCameraNormal());
 			
 			destinationPortalCamera.setPosition(entryPortalPosition);
 			destinationPortalCamera.rotate(angle);
@@ -297,6 +300,19 @@ public class MainSpillLoop {
 
 		DisplayManager.closeDisplay();
 
+	}
+
+	private static Vector3f SetPortalPosition(Camera camera, Vector3f portalNormal) {
+		
+		Vector3f difference = Vector3f.sub(camera.getPosition(), portalNormal, null);
+		difference.normalise();
+		Vector3f v = Vector3f.cross(portalNormal, difference, null);
+		Matrix3f m = Maths.createMatrix3fFromVector3f(v);
+		float sinus = v.length();
+		float cosinus = Vector3f.dot(portalNormal, difference);
+		
+		
+		return null;
 	}
 
 	/*

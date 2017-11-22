@@ -1,6 +1,5 @@
 package water;
 
-import java.util.Vector;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -26,6 +25,11 @@ public class WaterTile {
     public Vector3f getNormalVector()
     {
     	return normalVector;
+    }
+    
+    public Vector3f getPosition()
+    {
+    	return position;
     }
     
     

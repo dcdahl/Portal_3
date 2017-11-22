@@ -37,7 +37,7 @@ public class WaterRenderer {
         prepareRender(camera);  
         for (WaterTile tile : water) {
             Matrix4f modelMatrix = Maths.createTransformationMatric(
-                    new Vector3f(tile.getX(), tile.getHeight(), tile.getZ()), -90, 0, 0,
+                    tile.getPosition(), -90, 0, 0,
                     WaterTile.TILE_SIZE);
             
             shader.loadModelMatrix(modelMatrix);
