@@ -4,14 +4,10 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 
-
-
-
-
 /*
  * 
- * Du kan se bort i fra denne klassen, da det var et forsøk på å implementere bevegelse for objekter basert på tid og ikke frames.
- * Planen var å spørre deg om dette på onsdag den 27. sept, men du ble syk, så da var jeg stuck.. :(
+ * Du kan se bort i fra denne klassen, da det var et forsï¿½k pï¿½ ï¿½ implementere bevegelse for objekter basert pï¿½ tid og ikke frames.
+ * Planen var ï¿½ spï¿½rre deg om dette pï¿½ onsdag den 27. sept, men du ble syk, sï¿½ da var jeg stuck.. :(
  * 
  * 
  * 
@@ -19,37 +15,32 @@ import models.TexturedModel;
  * 
  * */
 
-public class MovableEntity extends Entity{
+public class MovableEntity extends Entity {
 
 	private float xSpeed = 0;
 	private float ySpeed = 0;
 	private float zSpeed = 0;
 	private float rotateLeftSpeed = 0;
 	private float rotateRightSpeed = 0;
-	
 
-	public MovableEntity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale, float xSpeed, float ySpeed, float zSpeed) {
+	public MovableEntity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale,
+			float xSpeed, float ySpeed, float zSpeed) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 		this.zSpeed = zSpeed;
-		
+
 	}
 
-	public void move(){
-		
-		
-		
-		
-	}
-	
+	public void move() {
 
-	public void stop(){
+	}
+
+	public void stop() {
 		this.xSpeed = 0;
 		this.ySpeed = 0;
 		this.zSpeed = 0;
 	}
-
 
 	public float getxSpeed() {
 		return xSpeed;
@@ -75,12 +66,4 @@ public class MovableEntity extends Entity{
 		this.zSpeed = zSpeed;
 	}
 
-
-
-
-	
-	
-	
-	
-	
 }
