@@ -3,7 +3,11 @@ package entiies;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
-
+/**
+ * En modell i en 3D-verden med en gitt struktur
+ * @author Windows10
+ *
+ */
 public class Entity {
 
 	private TexturedModel model;
@@ -22,12 +26,24 @@ public class Entity {
 		this.scale = scale;
 	}
 	
+	/**
+	 * Flytter modellen
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void increasePosition(float dx,float dy, float dz){
 		this.position.x+=dx;
 		this.position.y+=dy;
 		this.position.z+=dz;
 	}
 	
+	/**
+	 * Roterer modellen
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
 	public void increaseRotation(float dx,float dy, float dz){
 		this.rotX+= dx;
 		this.rotY+= dy;

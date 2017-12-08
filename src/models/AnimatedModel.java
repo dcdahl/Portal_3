@@ -6,6 +6,7 @@ import org.lwjgl.util.vector.Vector3f;
 import animation.Animation;
 import animation.Animator;
 import animation.Joint;
+import animation.JointTransform;
 import textures.ModelTexture;
 
 /**
@@ -36,16 +37,27 @@ public class AnimatedModel extends TexturedModel
 		return rootJoint;
 	}
 
+	/**
+	 * Setter hvilken animasjon modellen skal gjøre
+	 * @param animation Se {@link Animation}
+	 */
 	public void doAnimation(Animation animation)
 	{
 		animator.doAnimation(animation);
 	}
 	
+	/**
+	 * Oppdaterer posen til modellen
+	 * Se {@link Animator}
+	 */
 	public void update()
 	{
 		animator.update();
 	}
-	
+	/**
+	 * Se {@link JointTransform}
+	 * @return
+	 */
 	public Matrix4f[] getJointTransforms()
 	{
 		
@@ -55,6 +67,11 @@ public class AnimatedModel extends TexturedModel
 		
 	}
 	
+	/**
+	 * Legger til nede i hiarkiet for hvert enkelt ledd
+	 * @param parentJoint Se {@link Joint}
+	 * @param jointMatrices Liste med animasjon matriser
+	 */
 	private void addJointsToArray(Joint parentJoint,Matrix4f[] jointMatrices)
 	{
 		jointMatrices[parentJoint.index] = parentJoint.getAnimatedTransform();
