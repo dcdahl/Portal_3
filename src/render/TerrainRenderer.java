@@ -12,6 +12,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entiies.Entity;
 import models.RawModel;
 import models.TexturedModel;
+import shaders.StaticShader;
 import shaders.TerrainShader;
 import terrains.Terrain;
 import textures.ModelTexture;
@@ -20,7 +21,8 @@ import toolbox.Maths;
 
 /**
  * Denne klassen renderer Terrenget
- * @author DCDah
+ * Samme funksjonalitet som {@link StaticShader}
+ * @author Daniel Celand Dahl
  *
  */
 public class TerrainRenderer {

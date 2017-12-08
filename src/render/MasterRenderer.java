@@ -23,6 +23,10 @@ import shaders.TerrainShader;
 import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
+/**
+ * Klasse som hÃ¥ndterer rendering av alle modeller
+ *
+ */
 public class MasterRenderer {
 
 	private static final float FOV = 120;
@@ -46,10 +50,10 @@ public class MasterRenderer {
 	
 	/**
 	 * I denne klassen er mye hentet direkte fra ThinMatrix
-	 * @param loader
+	 * @param loader Se {@link Loader}
 	 */
 	public MasterRenderer(Loader loader){
-		// Sørger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
+		// Sï¿½rger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glCullFace(GL11.GL_BACK);
 		
@@ -85,7 +89,7 @@ public class MasterRenderer {
 		
 		terrains.clear();
 		entities.clear();
-		animatedEntities.clear();// må være der for å ikke lage mange hvert frame uten å slette de,
+		animatedEntities.clear();// mï¿½ vï¿½re der for ï¿½ ikke lage mange hvert frame uten ï¿½ slette de,
 	}
 	
 	public void processTerrain(Terrain terrain){
@@ -143,7 +147,7 @@ public class MasterRenderer {
 		
 		GL11.glClearColor(0.49f, 89f, 0.98f, 1);
 		
-		// Legger til mulighet for å se verteksene i spillet ved å trykke på X
+		// Legger til mulighet for ï¿½ se verteksene i spillet ved ï¿½ trykke pï¿½ X
 		if(polygonMode)
 			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		if(!polygonMode)

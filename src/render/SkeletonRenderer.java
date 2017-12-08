@@ -21,7 +21,7 @@ import textures.ModelTexture;
 import toolbox.Maths;
 
 /**
- * Klasse for håndtering av rendering av animerte objekter
+ * Klasse for hï¿½ndtering av rendering av animerte objekter
  * 
  *
  */
@@ -41,7 +41,7 @@ public class SkeletonRenderer
 	public void render(Map<AnimatedModel, List<AnimatedEntity>> entities)
 	{
 
-		// Går gjennom listen med entiteter som skal rendres
+		// Gï¿½r gjennom listen med entiteter som skal rendres
 		for (AnimatedModel model : entities.keySet())
 		{
 			prepareAnimatedModel(model);
@@ -63,7 +63,7 @@ public class SkeletonRenderer
 	{
 		RawModel rawModel = model.getRawModel();
 
-		// Aktiverer arrayene på GPU
+		// Aktiverer arrayene pï¿½ GPU
 		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
@@ -71,7 +71,7 @@ public class SkeletonRenderer
 		GL20.glEnableVertexAttribArray(3);
 		GL20.glEnableVertexAttribArray(4);
 
-		// henter texturen og
+		// henter texturen og setter hvordan gjenskinn av lys skal rendres
 		ModelTexture texture = model.getTexture();
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);

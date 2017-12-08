@@ -10,13 +10,11 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.PixelFormat;
 
+/**
+ * Håndterer hvordan programmet vises på skjermen
+ * Sterkt inspirert av ThinMatrix
+ */
 public class DisplayManager {
-	
-	//private static final int WIDTH = 1366;
-	//private static final int HEIGHT = 768;
-	
-	//private static final int WIDTH = 2560;
-	//private static final int HEIGHT = 1440;
 	
 	private static final int WIDTH = 1920;
 	private static final int HEIGHT = 1080;
@@ -35,7 +33,7 @@ public class DisplayManager {
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH,HEIGHT));
 			Display.create(new PixelFormat(),attribs);
-			Display.setTitle("Mitt f�rste spill :-D");
+			Display.setTitle("Mitt f�rste spill :-D");
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}

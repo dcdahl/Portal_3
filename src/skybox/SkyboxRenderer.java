@@ -11,8 +11,8 @@ import models.RawModel;
 import render.Loader;
 
 /**
- * Denne klassen er tilnærmet kopiert fra ThinMatrix
- * @author DCDah
+ * Denne klassen er tilnï¿½rmet kopiert fra ThinMatrix
+ * @author Daniel Celand Dahl
  *
  */
 public class SkyboxRenderer {

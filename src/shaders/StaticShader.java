@@ -109,17 +109,5 @@ public class StaticShader extends ShaderProgram{
 		Matrix4f viewMatrix;
 		viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
-	}
-
-
-	public void loadViewMatrix(Camera camera, Matrix4f rotationMatrix) {
-		Matrix4f viewMatrix;
-		viewMatrix = Maths.createViewMatrix(camera,rotationMatrix);
-		Matrix4f.mul(viewMatrix, rotationMatrix, viewMatrix);
-		super.loadMatrix(location_viewMatrix, viewMatrix);
-		
-	}
-	
-	
-	
+	}	
 }

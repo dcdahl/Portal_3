@@ -15,7 +15,7 @@ import models.RawModel;
 /**
  * 
  * OBJLoadern leser .obj filene 
- * 
+ * Modifisering av loader laget av ThinMatrix
  * 
  */
 public class OBJLoader {
@@ -51,17 +51,17 @@ public class OBJLoader {
 				//line = reader.readLine();
 				String[] currentLine = line.split(" ");
 				if(line.startsWith("v ")){
-					// Lager en vektor basert på verdiene som leses inn på linjen
+					// Lager en vektor basert pï¿½ verdiene som leses inn pï¿½ linjen
 					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]),
 							Float.parseFloat(currentLine[2]),Float.parseFloat(currentLine[3]));
 					
-					// Hvis det er første gjennomkjøring, lager vi nye vektorer.
+					// Hvis det er fï¿½rste gjennomkjï¿½ring, lager vi nye vektorer.
 					if(vecMax == null){
 						vecMax = new Vector3f(vertex.x, vertex.y, vertex.z);
 						vecMin = new Vector3f(vertex.x, vertex.y, vertex.z);
 					}
 					else{
-						// Sjekker om verdiene er høyere enn den høyeste sålangt.
+						// Sjekker om verdiene er hï¿½yere enn den hï¿½yeste sï¿½langt.
 						if(vertex.x > vecMax.x)
 							vecMax.x = vertex.x;
 						if(vertex.y > vecMax.y)
@@ -69,7 +69,7 @@ public class OBJLoader {
 						if(vertex.z > vecMax.z)
 							vecMax.z = vertex.z;
 						
-						// Sjekker om verdiene er lavere enn den laveste sålangt.
+						// Sjekker om verdiene er lavere enn den laveste sï¿½langt.
 						if(vertex.x < vecMin.x)
 							vecMin.x = vertex.x;
 						if(vertex.y < vecMin.y)

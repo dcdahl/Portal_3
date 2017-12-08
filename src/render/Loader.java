@@ -25,6 +25,10 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 import models.RawModel;
 import textures.CubemapTexture;
 
+/**
+ * Loader data om en modell til VAO-ene
+ * @author Daniel Celand Dahl
+ */
 public class Loader
 {
 
@@ -67,6 +71,11 @@ public class Loader
 		return new RawModel(vaoID, indices.length,null,null);
 	}
 
+	/**
+	 * Loader en tekstur til VAO-ene
+	 * @param fileName Filnavn til teksturfilen
+	 * @return Adresse til teksturen i minnet
+	 */
 	public int loadTexture(String fileName)
 	{
 		Texture tex = null;
@@ -95,11 +104,25 @@ public class Loader
 		return vaoID;
 	}
 
+	
+	/**
+	 * For Ã¥ kunne loade modeller med 3 eller 5 attributter
+	 * @param attributeNumber
+	 * @param coordinateSize
+	 * @param data
+	 */
 	private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data)
 	{
 		storeDataInAttributeList(attributeNumber,coordinateSize,data,false);
 	}
 	
+	/**
+	 * Lagrer attributt i VAO-en
+	 * @param attributeNumber
+	 * @param coordinateSize
+	 * @param data
+	 * @param storeInIntBuffer
+	 */
 	private void storeDataInAttributeList(int attributeNumber, int coordinateSize, float[] data,boolean storeInIntBuffer){
 		FloatBuffer floatBuffer = null;
 		IntBuffer intBuffer = null;
@@ -227,7 +250,7 @@ public class Loader
 	{
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
-		buffer.flip(); // Klargjør buffer til ï¿½ bli lest fra
+		buffer.flip(); // Klargjï¿½r buffer til ï¿½ bli lest fra
 		return buffer;
 	}
 

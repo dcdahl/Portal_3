@@ -10,7 +10,7 @@ import entiies.Light;
 import toolbox.Maths;
 
 /**
- * Oppretter et program for å tegne terrenget
+ * Oppretter et program for ï¿½ tegne terrenget
  * @author DCDah
  *
  */
@@ -122,13 +122,4 @@ public class TerrainShader extends ShaderProgram{
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
-
-
-	public void loadViewMatrix(Camera camera, Matrix4f rotationMatrix) {
-		Matrix4f viewMatrix = Maths.createViewMatrix(camera,rotationMatrix);
-		super.loadMatrix(location_viewMatrix, viewMatrix);
-		
-	}
-	
-	
 }
