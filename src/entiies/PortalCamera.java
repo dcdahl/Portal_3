@@ -22,7 +22,7 @@ public class PortalCamera extends Camera{
 		cameraNormal = tile.getNormalVector();
 	}
 	
-	public PortalCamera(WaterTile tile,Player player)
+	public PortalCamera(PortalTile tile,Player player)
 	{
 		super(player);
 		cameraNormal = tile.getNormalVector();
