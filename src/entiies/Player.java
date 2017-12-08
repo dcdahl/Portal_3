@@ -10,6 +10,11 @@ import render.DisplayManager;
 import render.MasterRenderer;
 import terrains.Terrain;
 
+/**
+ * Klasse som hÃ¥ndterer en bevegelig spiller
+ * @author Daniel Celand Dahl
+ *
+ */
 public class Player extends AnimatedEntity{
 	
 	
@@ -42,7 +47,10 @@ public class Player extends AnimatedEntity{
 	}
 
 	
-
+/**
+ * Metode for Ã¥ bevege seg over et gitt terreng
+ * @param terrain Terrenget som spilleren beveger seg over. Se {@link Terrain}
+ */
 	public void move(Terrain terrain){
 		checkInputs();
 		
@@ -62,13 +70,13 @@ public class Player extends AnimatedEntity{
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		float dy = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
 		
-		// Finner terrenghøyden til popsisjonen vi er i nå. 
+		// Finner terrenghï¿½yden til popsisjonen vi er i nï¿½. 
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
 		
 		// Lager en ny vektor av bevegelsesdistansene. 
 		Vector3f movingDistance = new Vector3f(dx, dy, dz);
 		
-		// Legger de til den nåværende posisjonen for å finne punktet vi ønsker å gå til.
+		// Legger de til den nï¿½vï¿½rende posisjonen for ï¿½ finne punktet vi ï¿½nsker ï¿½ gï¿½ til.
 		Vector3f newPosition = Vector3f.add(this.getPosition(), movingDistance, null);
 		boundingBox.setCenterPosition(newPosition);
 		
@@ -84,7 +92,7 @@ public class Player extends AnimatedEntity{
 			
 		
 						
-		// Hvis vi ikke kommer til å krysse noe
+		// Hvis vi ikke kommer til ï¿½ krysse noe
 		if(!isIntersecting){
 			super.increasePosition(dx, dy, dz);
 			
@@ -94,15 +102,15 @@ public class Player extends AnimatedEntity{
 				super.getPosition().y = terrainHeight;
 			}
 		
-		// Hvis vi kommer til å krysse ovenfra etter et hopp (er i lufta)
+		// Hvis vi kommer til ï¿½ krysse ovenfra etter et hopp (er i lufta)
 		}else if(newPosition.y < intersectingBox.getMax().y && this.getPosition().y > intersectingBox.getMax().y){
 
 				super.increasePosition(dx, 0, dz);
-				super.getPosition().y = intersectingBox.getMax().y; // Flytt spillern til toppen av boksen, så den ikke krysser med er akkurat på toppen.
+				super.getPosition().y = intersectingBox.getMax().y; // Flytt spillern til toppen av boksen, sï¿½ den ikke krysser med er akkurat pï¿½ toppen.
 				isInAir = false;
 				upwardsSpeed = 0;
 		
-		// Hvis vi kommer til å krysse og er i lufta, men ikke er over objektet, da er vi på siden.
+		// Hvis vi kommer til ï¿½ krysse og er i lufta, men ikke er over objektet, da er vi pï¿½ siden.
 		}else if(isInAir){
 			 if(super.getPosition().y < terrainHeight){
 					
@@ -112,12 +120,12 @@ public class Player extends AnimatedEntity{
 			}
 			super.increasePosition(0, dy, 0);
 		
-		// Hvis vi kommer til å krysse, men kommer ikke oppå objektet
+		// Hvis vi kommer til ï¿½ krysse, men kommer ikke oppï¿½ objektet
 		}else if(this.getPosition().y < intersectingBox.getMax().y){
-			// Gjør ingenting
+			// Gjï¿½r ingenting
 			
-		// Ellers er vi oppå objektet, og skal kun bevege oss i z og x aksen for ikke å krysse med objektet. 
-		// Dette hindrer spillern fra å falle mot bakken og vi kan bevege oss på objektet.
+		// Ellers er vi oppï¿½ objektet, og skal kun bevege oss i z og x aksen for ikke ï¿½ krysse med objektet. 
+		// Dette hindrer spillern fra ï¿½ falle mot bakken og vi kan bevege oss pï¿½ objektet.
 		}else{
 			super.increasePosition(dx, 0, dz);
 		}
@@ -152,7 +160,7 @@ public class Player extends AnimatedEntity{
 		else
 			this.currentSpeed = 0;
 			
-		// Høyre og venstre
+		// Hï¿½yre og venstre
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) 
 			this.currentTurnSpeed = -TURN_SPEED;
 		else if(Keyboard.isKeyDown(Keyboard.KEY_A))

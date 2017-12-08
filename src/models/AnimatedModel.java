@@ -8,6 +8,11 @@ import animation.Animator;
 import animation.Joint;
 import textures.ModelTexture;
 
+/**
+ * Modell som er animert og har struktur.
+ * Sterkt inspirert av ThinMatrix
+ *
+ */
 public class AnimatedModel extends TexturedModel
 {
 	private final Joint rootJoint;
