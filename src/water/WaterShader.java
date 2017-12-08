@@ -2,10 +2,16 @@ package water;
  
 import org.lwjgl.util.vector.Matrix4f;
 import shaders.ShaderProgram;
+import shaders.StaticShader;
 import toolbox.Maths;
 import entiies.Camera;
 import entiies.Light;
  
+/**
+ * Tilnærmet lik andre shadere for eksempel {@link StaticShader}
+ * @author Marius
+ * Skrevet fra ThinMatrix water tutorial 
+ */
 public class WaterShader extends ShaderProgram {
  
     private final static String VERTEX_FILE = "src/water/waterVertex.txt";

@@ -9,7 +9,7 @@ import entiies.Camera;
 /**
  * Tilnærmet lik andre shadere for eksempel {@link StaticShader} og {@link WaterShader}
  * @author Marius
- *
+ *Modifisering av vann tutorial fra ThinMatrix
  */
 public class PortalShader extends ShaderProgram {
  

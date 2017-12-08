@@ -1,5 +1,5 @@
 #version 400 core
-
+//Skrevet fra ThinMatrix water tutorial 
 
 out vec4 out_Color;
 

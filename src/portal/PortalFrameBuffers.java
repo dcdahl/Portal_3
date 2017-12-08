@@ -20,7 +20,7 @@ import org.lwjgl.opengl.GL42;
 /**
  * Mye er likt i denne klassen som vann pakken siden portalene er basert på samme prinsipp
  * @author Marius
- *
+ * Modifisering av vann tutorial fra ThinMatrix
  */
 public class PortalFrameBuffers {
  

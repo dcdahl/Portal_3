@@ -1,6 +1,8 @@
 package portal;
 
-
+/**
+ * Modifisering av vann tutorial fra ThinMatrix
+ */
 import org.lwjgl.util.vector.Vector3f;
 
 public class PortalTile {
