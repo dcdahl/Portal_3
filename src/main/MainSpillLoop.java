@@ -86,24 +86,8 @@ public class MainSpillLoop
 		// Terreng
 		loadTerrainPack(loader);
 		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap, "SluJkrJ2");
-		// Terrain terrain2 = new Terrain(-1, -1, loader, new
-		// ModelTexture(loader.loadTexture("grass")));
 		terrains.add(terrain);
-		// terrains.add(terrain2);
 		
-	
-		/*
-		// Building
-		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
-		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
-		TexturedModel buildingtexturedModel = new TexturedModel(buildingRawModel, buildingTex);
-		//Entity building = new Entity(buildingtexturedModel, new Vector3f(95, -2, 82), 0, 0, 0, 10f);
-		Entity building = new Entity(buildingtexturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 10f);
-		ModelTexture buildingspec = buildingtexturedModel.getTexture();
-		buildingspec.setShineDamper(500);
-		buildingspec.setReflectivity(0.4f);
-		//staticObjects.add(building);*/
-
 		// Building
 		ModelTexture cubeTex = new ModelTexture(loader.loadTexture("wall_texture"));
 		RawModel cubeRawModel = OBJLoader.loadObjModel("cube", loader);
@@ -125,7 +109,6 @@ public class MainSpillLoop
 		 staticObjects.add(superMan);
 
 		// *************** Objects in front of sourcePortal
-		// *************************************************
 		float boxScale = 2f;
 		ModelTexture kasse1Texture = new ModelTexture(loader.loadTexture("orange"));
 		RawModel kasse1Raw = OBJLoader.loadObjModel("cube", loader);
@@ -139,9 +122,6 @@ public class MainSpillLoop
 		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(175,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse2);
 //*************** Objects in front of destination portal ******************************************************		
-		//ModelTexture kasse3Texture = new ModelTexture(loader.loadTexture("Moon"));
-		//RawModel kasse3Raw = OBJLoader.loadObjModel("cube", loader);
-		//TexturedModel kasse3TexturedModel = new TexturedModel(kasse3Raw, kasse3Texture);
 		Entity kasse3 = new Entity(kasse2TexturedModel, new Vector3f(155,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse3);
 
@@ -158,13 +138,7 @@ public class MainSpillLoop
 		TexturedModel kasse5TexturedModel = new TexturedModel(kasse5Raw, kasse5Texture);
 		Entity kasse5 = new Entity(kasse5TexturedModel, kassePosition, 0, 1, 00, boxScale);
 		staticObjects.add(kasse5);
-		//Vector3f scaledMax = new Vector3f(kasse5Raw.getVecMax().x * boxScale,kasse5Raw.getVecMax().y * boxScale, kasse5Raw.getVecMax().z * boxScale);
-		//BoundingBox kasseBB = new BoundingBox(kasse5Raw.getVecMin(),scaledMax, kassePosition);
-		//Vector3f scaledMin = (Vector3f) kasse5Raw.getVecMax().scale(boxScale);
-		//BoundingBox.getAABBList().add(kasseBB);
-		
-		
-//********************WATER AKA PORTALS N STUFF************************************************************************
+//********************PORTALS ************************************************************************
 		PortalFrameBuffers portal1FBO = new PortalFrameBuffers();
 		PortalShader portal1Shader = new PortalShader();
 		PortalRenderer portal1Renderer = new PortalRenderer(loader, portal1Shader, renderer.getProjectionMatrix(), portal1FBO);
@@ -198,12 +172,6 @@ public class MainSpillLoop
 		Animator animator = new Animator(animatedModel);
 		animator.doAnimation(animation);
 		
-		//AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
-				//nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
-				//AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
-				//animatedObjects.add(newAnimatedEntity);
-				//animatedObjects.add(newAnimatedEntity2);
-				//animatedObjects.add(newAnimatedEntity3);
 		createAABBs();
 		
 		Vector3f playerPosition = new Vector3f(205, 0, 30);
@@ -235,7 +203,6 @@ public class MainSpillLoop
 		Light sun = new Light(new Vector3f(190, 180,50), new Vector3f(Light.HVIT), new Vector3f(Light.SVAK));
 		
 		while (!Display.isCloseRequested()) {
-			// Vector3f old = camera.getPosition();
 			// Aktiverer bevegelse av kamera
 			camera.move();
 			// Spillerbevegelse
@@ -253,10 +220,9 @@ public class MainSpillLoop
 			//Enabler bruke av gl_ClipDistance s� vi kan kalkulere og bruke clipping planes i koden v�r
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
-			// **********************PORTALS
+// **********************PORTALS *****************************************************
 			portal1FBO.bindReflectionFBO();
 			float angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
-			//change.normalise();
 
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
@@ -284,9 +250,6 @@ public class MainSpillLoop
 			sourcePortalCamera.setPosition(sourcePortalPosition);
 			sourcePortalCamera.rotate(angle);
 
-			// sourcePortalCamera.rotate(angle);
-			// sourcePortalCamera.setPitch(0);
-
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
@@ -311,7 +274,7 @@ public class MainSpillLoop
 			for(BoundingBox aabb: BoundingBox.getAABBList())
 				playerBB.intersects(aabb);
 			
-			//**************** WATER RENDERING ***********************************************************	
+//**************** WATER RENDERING ***********************************************************	
 			//render relfection
 			waterFbos.bindReflectionFBO();
 			//Kalkulerer distansen vi m� flytte kameraet. Vi vil flyttet kameraet under vannet og rendre refleksjonen fra denne posisjonen
@@ -380,19 +343,6 @@ public class MainSpillLoop
 		DisplayManager.closeDisplay();
 
 	}
-/*
-	private static Vector3f SetPortalPosition(Camera camera, Vector3f portalNormal) {
-
-		Vector3f difference = Vector3f.sub(camera.getPosition(), portalNormal, null);
-		difference.normalise();
-		Vector3f v = Vector3f.cross(portalNormal, difference, null);
-		Matrix3f m = Maths.createMatrix3fFromVector3f(v);
-		float sinus = v.length();
-		float cosinus = Vector3f.dot(portalNormal, difference);
-
-		return null;
-	}
-*/
 
 /**
  * Lager en animert model utifra data om modellen og en tekstur
