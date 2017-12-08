@@ -1,5 +1,6 @@
 package textures;
 
+//Denne klassen er hentet direkte fra ThinMatrix
 public class ModelTexture {
 
 	private int textureID;
@@ -12,7 +13,7 @@ public class ModelTexture {
 		this.textureID = textureID;
 	}
 
-	
+
 	
 	
 	public float getShineDamper() {

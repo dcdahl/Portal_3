@@ -6,7 +6,7 @@ public class Light {
 
 	private Vector3f position;
 	private Vector3f colour;
-	private Vector3f attenuation = new Vector3f(1,0,0);
+	private Vector3f attenuation = new Vector3f(1,0,0); // Grad av oppløsning/nedbrytning av lyset i forhold til avstand
 	
 	// Farger
 	public static final Vector3f HVIT = new Vector3f(1, 1, 1);

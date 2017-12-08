@@ -106,9 +106,7 @@ public class OBJLoader {
 				processVertex(vertex3, indices, textures, normals, textureArray, normalsArray);
 
 			}
-			System.out.println(filename + ": Max-X: " + vecMax.x + " Max-Y: " + vecMax.y + " Max-Z: " + vecMax.z);
-			System.out.println(filename + ": Min-X: " + vecMin.x + " Min-Y: " + vecMin.y + " Min-Z: " + vecMin.z);
-
+			
 			reader.close();
 			
 			

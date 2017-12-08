@@ -18,6 +18,11 @@ import textures.ModelTexture;
 import textures.TerrainTexturePack;
 import toolbox.Maths;
 
+/**
+ * Denne klassen renderer Terrenget
+ * @author DCDah
+ *
+ */
 public class TerrainRenderer {
 
 	private TerrainShader shader;

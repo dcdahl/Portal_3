@@ -13,6 +13,13 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 import org.lwjgl.util.vector.Vector4f;
 
+
+/**
+ * Denne klassen setter opp linken mellom fragment-/vertexshader programmene og 
+ * lager et program som tar seg av dette.
+ * @author DCDah
+ *
+ */
 public abstract class ShaderProgram {
 
 	

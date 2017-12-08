@@ -152,7 +152,7 @@ public class Player extends AnimatedEntity{
 		else
 			this.currentSpeed = 0;
 			
-		// Hï¿½yre og venstre
+		// Høyre og venstre
 		if(Keyboard.isKeyDown(Keyboard.KEY_D)) 
 			this.currentTurnSpeed = -TURN_SPEED;
 		else if(Keyboard.isKeyDown(Keyboard.KEY_A))

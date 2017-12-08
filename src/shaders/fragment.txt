@@ -20,7 +20,7 @@ void main(void){
 
 	
 	/*
-		Lighting, multiple sources
+		Lys, flere lyskilder
 	*/
 	vec3 totalDiffuse = vec3(0.0);
 	vec3 totalSpecular = vec3(0.0);
@@ -30,6 +30,7 @@ void main(void){
 		float attFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
 		vec3 unitLightVector = normalize(toLightVector[i]);
 		float nDot1 = dot(unitNormal,unitLightVector);
+		
 		// Ambient
 		float brightness = max(nDot1,0.0);
 		

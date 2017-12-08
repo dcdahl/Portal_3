@@ -73,14 +73,13 @@ public class Loader
 		try
 		{
 			tex = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileName + ".png"));
-		} catch (FileNotFoundException e)
-		{
+		}catch (FileNotFoundException e){
 			e.printStackTrace();
-		} catch (IOException e)
-		{
+		} catch (IOException e){
 			System.out.println(fileName);
 			e.printStackTrace();
 		}
+		
 		int textureID = tex.getTextureID();
 		textures.add(textureID);
 		return textureID;
@@ -121,9 +120,7 @@ public class Loader
 		floatBuffer = storedataInFloatBuffer(data);
 		else
 		intBuffer = storeDataInIntBuffer(floatArrayToIntArray(data));
-		
-		
-		
+				
 		if(floatBuffer != null)
 		{
 			// Lagrer buffern i VBOen. 
@@ -148,6 +145,7 @@ public class Loader
 		
 	}
 	
+	// Laster inn teksturen til skyboksen (himmelen)
 	public int loadCubemap(String[] textureFiles){
 		int textID = GL11.glGenTextures();
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
@@ -229,7 +227,7 @@ public class Loader
 	{
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data);
-		buffer.flip(); // Klargjï¿½r buffer til ï¿½ bli lest fra
+		buffer.flip(); // Klargjør buffer til ï¿½ bli lest fra
 		return buffer;
 	}
 

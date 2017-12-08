@@ -6,11 +6,14 @@ import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entiies.Camera;
-
+/**
+ * Denne klassen er hentet nærmest direkte fra ThinMatrix
+ * @author DCDah
+ *
+ */
 public class Maths
 {
-	public static Matrix4f createTransformationMatric(Vector3f translation, float rx, float ry, float rz, float scale)
-	{
+	public static Matrix4f createTransformationMatric(Vector3f translation, float rx, float ry, float rz, float scale){
 
 		Matrix4f matrix = new Matrix4f();
 
@@ -30,8 +33,7 @@ public class Maths
 		return matrix;
 	}
 
-	public static Matrix4f createViewMatrix(Camera camera)
-	{
+	public static Matrix4f createViewMatrix(Camera camera){
 		Matrix4f viewMatrix = new Matrix4f();
 		viewMatrix.setIdentity();
 		Matrix4f.rotate((float) Math.toRadians(camera.getPitch()), new Vector3f(1, 0, 0), viewMatrix, viewMatrix);
@@ -44,8 +46,8 @@ public class Maths
 	}
 
 	// Kopiert rett fra ThinMatrix
-	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos)
-	{
+	// Kalkulerer nøyaktig posisjon innenfor en trekant
+	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos){
 		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
 		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;
 		float l2 = ((p3.z - p1.z) * (pos.x - p3.x) + (p1.x - p3.x) * (pos.y - p3.z)) / det;
@@ -53,8 +55,7 @@ public class Maths
 		return l1 * p1.y + l2 * p2.y + l3 * p3.y;
 	}
 	
-	public static Matrix3f createMatrix3fFromVector3f(Vector3f vector)
-	{
+	public static Matrix3f createMatrix3fFromVector3f(Vector3f vector){
 		Matrix3f newMatrix = new Matrix3f();
 		
 		newMatrix.m00 = 0;

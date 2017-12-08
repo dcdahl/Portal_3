@@ -2,6 +2,7 @@ package textures;
 
 import java.nio.ByteBuffer;
 
+// Denne klassen er hentet direkte fra ThinMatrix
 public class CubemapTexture {
 	private int width;
     private int height;

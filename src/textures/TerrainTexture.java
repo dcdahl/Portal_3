@@ -1,5 +1,7 @@
 package textures;
 
+
+//Denne klassen er hentet direkte fra ThinMatrix
 public class TerrainTexture {
 	
 	private int textureID;

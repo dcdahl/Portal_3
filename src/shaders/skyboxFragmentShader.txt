@@ -1,5 +1,7 @@
 #version 400
 
+// Kopiert direkte fra ThinMatrix
+
 in vec3 textureCoords;
 out vec4 out_Color;
 

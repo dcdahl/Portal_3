@@ -9,6 +9,11 @@ import entiies.Camera;
 import entiies.Light;
 import toolbox.Maths;
 
+/**
+ * Oppretter et program for å tegne terrenget
+ * @author DCDah
+ *
+ */
 public class TerrainShader extends ShaderProgram{
 	private static final int MAX_LIGHTS = 4;
 	private static final String VERTEX_FILE = "src/shaders/terrainVertex.txt";

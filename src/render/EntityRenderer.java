@@ -17,6 +17,12 @@ import shaders.StaticShader;
 import textures.ModelTexture;
 import toolbox.Maths;
 
+
+/**
+ * Klasse for håndtering av rendering av statiske objekter i verden
+ * @author DCDah
+ *
+ */
 public class EntityRenderer {
 	
 
@@ -36,7 +42,7 @@ public class EntityRenderer {
 	
 	public void render(Map<TexturedModel,List<Entity>> entities){
 		
-		// Gï¿½r gjennom listen med entiteter som skal rendres
+		// Går gjennom listen med entiteter som skal rendres
 		for(TexturedModel model : entities.keySet()){
 			prepareTexturedModel(model);
 			
@@ -55,16 +61,13 @@ public class EntityRenderer {
 	private void prepareTexturedModel(TexturedModel model){
 		RawModel rawModel = model.getRawModel();
 		
-		// Aktiverer arrayene pï¿½ GPu
+		// Aktiverer arrayene på GPU
 		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);
 		GL20.glEnableVertexAttribArray(2);
-		//GL20.glEnableVertexAttribArray(3);
-	//	GL20.glEnableVertexAttribArray(4);
 		
-		
-		// henter texturen og 
+		// henter texturen 
 		ModelTexture texture = model.getTexture();
 		shader.loadShineVariables(texture.getShineDamper(), texture.getReflectivity());
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, model.getTexture().getTextureID());
@@ -75,8 +78,6 @@ public class EntityRenderer {
 		GL20.glDisableVertexAttribArray(0);
 		GL20.glDisableVertexAttribArray(1);
 		GL20.glDisableVertexAttribArray(2);
-		//GL20.glDisableVertexAttribArray(3);
-		//GL20.glDisableVertexAttribArray(4);
 		GL30.glBindVertexArray(0);
 	}
 	

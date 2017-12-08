@@ -5,6 +5,11 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * I denne klassen er mye hentet direkte fra ThinMatrix
+ * @author DCDah
+ *
+ */
 public class Camera {
 
 	private static final int MOUSE_BUTTON_LEFT = 0;
@@ -25,6 +30,7 @@ public class Camera {
 	private Player player;
 	private Matrix4f rotationMatrix = new Matrix4f();
 	
+
 	public Camera(Player player){
 		this.player = player;
 		
@@ -38,8 +44,6 @@ public class Camera {
 	
 	public void move(){
 		calculateZoom();
-		//calculatePitch();
-		//calculateAngleAroundPlayer();
 		checkCameraReset();
 		
 		calculatePitchAndAngleAroundPlayer();
@@ -56,8 +60,7 @@ public class Camera {
 		rotationMatrix = Matrix4f.rotate(angleAroundPlayer, new Vector3f(0,roll,0), rotationMatrix, null);
 	}
 	
-	public Matrix4f getRotationMatrix()
-	{
+	public Matrix4f getRotationMatrix(){
 		return rotationMatrix;	
 	}
 	
@@ -65,23 +68,16 @@ public class Camera {
 
 	public void calculateCameraPosition(float horizontalDistance, float verticalDistance){
 		
-		
-		
 		float theta = player.getRotX() + angleAroundPlayer;
 		float offsetX = (float) (horizontalDistance * Math.sin(Math.toRadians(theta)));
 		float offsetZ = (float) (horizontalDistance * Math.cos(Math.toRadians(theta)));
 		
-		
 		position.x = player.getPosition().x - offsetX;
 		position.z = player.getPosition().z - offsetZ;
 		
-		
-		//position.y = player.getPosition().y + verticalDistance;
 		position.y = getFaceView() + verticalDistance;
 		
 	}
-
-	
 	
 	
 	private float calculateHorizontalDistance(){
@@ -100,8 +96,6 @@ public class Camera {
 	}
 	
 	
-
-	
 	
 	
 	private void calculatePitchAndAngleAroundPlayer(){
@@ -112,16 +106,14 @@ public class Camera {
 			pitch -= pitchChange;
 			angleAroundPlayer -= angleChange;
 		
-				
+			// Setter begrensninger 
 			if(pitch < 0)
 				pitch = 0;
 			else if(pitch > 90)
 				pitch = 90;
 			
 		}
-		
 	}
-	
 	
 	
 	
@@ -135,7 +127,8 @@ public class Camera {
 		else
 			distanceFromPlayer -= zoomLevel;
 	}
-		
+	
+	// Resetter kamera til standard innstillinger
 	public void resetCameraToDefaultSettings(){
 		distanceFromPlayer = 50;
 		angleAroundPlayer = 0;
@@ -151,29 +144,6 @@ public class Camera {
 		if(Mouse.isButtonDown(MOUSE_BUTTON_RIGHT))
 			resetCameraToDefaultSettings();
 	}
-	
-	/*
-
-	
-	
-	private void calculatePitch(){
-		if(Mouse.isButtonDown(MOUSE_BUTTON_RIGHT)){
-			float pitchChange = Mouse.getDY() * 0.1f;
-			pitch -= pitchChange;
-		}
-	}
-		private void calculateAngleAroundPlayer(){
-		if(Mouse.isButtonDown(MOUSE_BUTTON_LEFT)){
-			float angleChange = Mouse.getDX() * MOUSE_SENSETIVITY;
-			angleAroundPlayer -= angleChange;
-			
-		}
-	}
-	
-	*/
-	
-
-	
 	
 	
 	public float getFaceView(){
@@ -208,11 +178,5 @@ public class Camera {
 	public void setRoll(float roll) {
 		this.roll = roll;
 	}
-
-	
-	
-	
-	
-
 	
 }

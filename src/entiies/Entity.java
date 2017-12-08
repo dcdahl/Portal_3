@@ -36,9 +36,7 @@ public class Entity {
 	
 	
 	/*
-	 * 
 	 * Get Set
-	 * 
 	 */
 	public TexturedModel getModel() {
 		return model;

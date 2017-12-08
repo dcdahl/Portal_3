@@ -10,6 +10,11 @@ import entiies.Camera;
 import models.RawModel;
 import render.Loader;
 
+/**
+ * Denne klassen er tilnærmet kopiert fra ThinMatrix
+ * @author DCDah
+ *
+ */
 public class SkyboxRenderer {
 
 	

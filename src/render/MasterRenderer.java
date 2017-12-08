@@ -44,10 +44,14 @@ public class MasterRenderer {
 	private Map<TexturedModel,List<Entity>> entities = new HashMap<TexturedModel,List<Entity>>();
 	private Map<AnimatedModel,List<AnimatedEntity>> animatedEntities = new HashMap<AnimatedModel,List<AnimatedEntity>>();
 	
+	/**
+	 * I denne klassen er mye hentet direkte fra ThinMatrix
+	 * @param loader
+	 */
 	public MasterRenderer(Loader loader){
-		// Sï¿½rger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
-		//GL11.glEnable(GL11.GL_CULL_FACE);
-		//GL11.glCullFace(GL11.GL_BACK);
+		// Sørger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glCullFace(GL11.GL_BACK);
 		
 		createProjectionMatrix();
 		renderer = new EntityRenderer(shader, projectionMatrix);
@@ -55,6 +59,7 @@ public class MasterRenderer {
 		skeletonRenderer = new SkeletonRenderer(animatedShader, projectionMatrix);
 		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
 	}
+	
 	
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane){
 		prepare();
@@ -80,7 +85,7 @@ public class MasterRenderer {
 		
 		terrains.clear();
 		entities.clear();
-		animatedEntities.clear();// mï¿½ vï¿½re der for ï¿½ ikke lage mange hvert frame uten ï¿½ slette de,
+		animatedEntities.clear();// må være der for å ikke lage mange hvert frame uten å slette de,
 	}
 	
 	public void processTerrain(Terrain terrain){
@@ -100,7 +105,7 @@ public class MasterRenderer {
 			entities.put(entityModel, newBatch);
 		}
 	}
-	
+	// Hentet fra ThinMatrix
 	public void processAnimatedEntity(AnimatedEntity animatedEntity)
 	{
 		AnimatedModel entityModel = animatedEntity.getModel();
@@ -114,6 +119,7 @@ public class MasterRenderer {
 		}
 	}
 	
+	// Hentet fra ThinMatrix
 	private void createProjectionMatrix(){
         float aspectRatio = (float) Display.getWidth() / (float) Display.getHeight();
         float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
@@ -129,6 +135,7 @@ public class MasterRenderer {
         projectionMatrix.m33 = 0;
 	}
 	
+	
 	public void prepare(){
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -136,6 +143,7 @@ public class MasterRenderer {
 		
 		GL11.glClearColor(0.49f, 89f, 0.98f, 1);
 		
+		// Legger til mulighet for å se verteksene i spillet ved å trykke på X
 		if(polygonMode)
 			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
 		if(!polygonMode)
@@ -161,6 +169,7 @@ public class MasterRenderer {
 		polygonMode = polyMode;
 	}
 
+	// Hentet fra ThinMatrix
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane,
 			Matrix4f rotationMatrix) {
 		prepare();

@@ -69,7 +69,7 @@ public class MainSpillLoop
 		Loader loader = new Loader();
 		MasterRenderer renderer = new MasterRenderer(loader);
 		
-		
+		createJumpBoxes(loader);
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		List<AnimatedEntity> animatedObjects = new ArrayList<AnimatedEntity>();
 		List<Light> lights = createLights();
@@ -83,7 +83,7 @@ public class MainSpillLoop
 		// terrains.add(terrain2);
 		
 	
-		
+		/*
 		// Building
 		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
 		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
@@ -93,7 +93,7 @@ public class MainSpillLoop
 		ModelTexture buildingspec = buildingtexturedModel.getTexture();
 		buildingspec.setShineDamper(500);
 		buildingspec.setReflectivity(0.4f);
-		//staticObjects.add(building);
+		//staticObjects.add(building);*/
 
 		// Building
 		ModelTexture cubeTex = new ModelTexture(loader.loadTexture("wall_texture"));
@@ -199,7 +199,7 @@ public class MainSpillLoop
 		
 		Vector3f playerPosition = new Vector3f(205, 0, 30);
 		BoundingBox playerBB = new BoundingBox(animatedModelData.getMeshData().getVecMin(), animatedModelData.getMeshData().getVecMax(), playerPosition);
-		System.out.println("Max = " + playerBB.getMax() + ", Min = ");
+		
 		Player player = new Player(animatedModel,animator,animation , playerPosition, 0, -90, 0, 1, playerBB);
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
@@ -384,26 +384,7 @@ public class MainSpillLoop
 		return null;
 	}
 */
-	/*
-	 * Forsï¿½k pï¿½ ï¿½ fï¿½ jorden til ï¿½ gï¿½ i bane rundt solen Work in progress :-)
-	 */
-	private static Vector3f calcOrbit(Vector3f posOrigin, Vector3f posOrbiter, float degree, int radius) {
 
-		Double x = Math.cos(degree) * radius;
-		Double z = Math.sin(degree) * radius;
-
-		posOrbiter.x = posOrigin.x + x.floatValue();
-		posOrbiter.z = posOrigin.z + z.floatValue();
-
-		return new Vector3f(posOrbiter);
-	}
-
-	private static float i = 2f;
-
-	private static float exp() {
-		return i * i;
-
-	}
 
 	public static AnimatedModel loadEntity(AnimatedModelData entityData, TexturedModel texture) {
 		SkeletonData skeletonData = entityData.getJointsData();
@@ -502,7 +483,7 @@ public class MainSpillLoop
 	
 	private static void createAABBs(){
 		
-		// Lager AABB basert pï¿½ posisjonene og stï¿½rrelses skalaen. 
+		// Lager AABB basert på posisjonene og størrelses skalaen. 
 		for (Entity ent : staticObjects) {
 			float scale = ent.getScale();
 			Vector3f scaledMax = new Vector3f(
@@ -522,5 +503,31 @@ public class MainSpillLoop
 			BoundingBox.getAABBList().add(aabb);
 		}
 	}
+	
+	
+	private static void createJumpBoxes(Loader loader){
+		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
+		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
+		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse2Texture);
+
+		Vector3f startPosition = new Vector3f(175,0,100);
+		
+		int heightIncrement = 4;
+		int lenghIncrement = 20;
+		int zIncrement = 0;
+		float boxScale = 4f;
+		int amount = 10;
+		
+		for (int i = 0; i < amount; i++) {
+			staticObjects.add(new Entity(kasse2TexturedModel, startPosition, 0, 0, 0, boxScale));
+			startPosition.setX(startPosition.x + lenghIncrement);
+			startPosition.setY(startPosition.y + heightIncrement);
+			startPosition.setZ(startPosition.z + zIncrement);
+		}
+		
+		
+	}
+	
+	
 	
 }

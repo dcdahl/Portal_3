@@ -27,10 +27,6 @@ public class DisplayManager {
 	private static float delta;
 	
 
-	
-	
-	
-	
 	// Lager displayet og setter innstillingene til det. 
 	public static void createDisplay(){
 		

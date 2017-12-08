@@ -21,8 +21,8 @@ import textures.ModelTexture;
 import toolbox.Maths;
 
 /**
- * Klasse for hÃ¥ndtering av rendering av animerte objekter
- * @author Windows10
+ * Klasse for håndtering av rendering av animerte objekter
+ * 
  *
  */
 public class SkeletonRenderer
@@ -41,7 +41,7 @@ public class SkeletonRenderer
 	public void render(Map<AnimatedModel, List<AnimatedEntity>> entities)
 	{
 
-		// Gï¿½r gjennom listen med entiteter som skal rendres
+		// Går gjennom listen med entiteter som skal rendres
 		for (AnimatedModel model : entities.keySet())
 		{
 			prepareAnimatedModel(model);
@@ -63,7 +63,7 @@ public class SkeletonRenderer
 	{
 		RawModel rawModel = model.getRawModel();
 
-		// Aktiverer arrayene pï¿½ GPu
+		// Aktiverer arrayene på GPU
 		GL30.glBindVertexArray(rawModel.getVaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL20.glEnableVertexAttribArray(1);

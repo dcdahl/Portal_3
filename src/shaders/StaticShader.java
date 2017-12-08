@@ -11,6 +11,11 @@ import entiies.Light;
 import entiies.PortalCamera;
 import toolbox.Maths;
 
+/**
+ * 
+ * @author DCDah
+ * Klassen er sterkt inspirert av ThinMatrix
+ */
 public class StaticShader extends ShaderProgram{
 
 	private static final int MAX_LIGHTS = 4;
@@ -36,7 +41,6 @@ public class StaticShader extends ShaderProgram{
 
 	
 	// Binder attibuttene i VAOen til variabelnavnene som vi finner igjen i vertex shadern.
-	
 	@Override
 	protected void bindAttributes() {
 		// Binder attibutt nr 0 i VAOen til variabelnavnet position som vi finner igjen i vertex shadern.
@@ -77,6 +81,7 @@ public class StaticShader extends ShaderProgram{
 	public void loadClipPlane(Vector4f plane) {
 		super.loadVector(location_plane, plane);
 	}
+	
 	public void loadLights(List<Light> lights){
 		for (int i = 0; i < MAX_LIGHTS; i++) {
 			if(i<lights.size()){
@@ -102,9 +107,6 @@ public class StaticShader extends ShaderProgram{
 	
 	public void loadViewMatrix(Camera camera){
 		Matrix4f viewMatrix;
-		//if(camera.getClass().getName().equals(PortalCamera.class.getName()))
-			//viewMatrix = (Matrix4f) ((PortalCamera)camera).getView();
-		//else
 		viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
