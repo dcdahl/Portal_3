@@ -9,7 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
  * Klasse laget av ThinMatrix (see
  * <a href="https://www.youtube.com/watch?v=cieheqt7eqc">ThinMatrix Skeleton
  * Animation video 3</a>). Håndterer hvordan et ledd i skjelettet skal transformeres (Engelsk: Transform Joint) i forhold til 
- * hvor langt man er i en animasjon. @see {@link KeyFrame}
+ * foreldre-leddet. Brukes i {@link KeyFrame}
  * Det eneste som er gjort her er å legge til linker til andre klasser som har blitt brukt
  * 
  *

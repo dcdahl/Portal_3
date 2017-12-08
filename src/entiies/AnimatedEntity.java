@@ -4,6 +4,11 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.AnimatedModel;
 
+/**
+ * Entitet som er animert. Flere entiteter kan baseres på samme modell
+ * @author Jonatan Bårdsen
+ *
+ */
 public class AnimatedEntity extends Entity
 {
 	private AnimatedModel model;

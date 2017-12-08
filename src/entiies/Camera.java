@@ -6,8 +6,9 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 /**
- * I denne klassen er mye hentet direkte fra ThinMatrix
- * @author DCDah
+ * I denne klassen er mye hentet direkte fra ThinMatrix.
+ * Håndterer et kamera i en 3D-verden
+ * @author Daniel Celand Dahl
  *
  */
 public class Camera {

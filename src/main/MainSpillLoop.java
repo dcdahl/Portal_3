@@ -55,6 +55,11 @@ import water.WaterShader;
 import water.WaterTile;
 import animation.*;
 
+/**
+ * Klasse som inneholder program-loopen
+ * @author Daniel Celand Dahl
+ *
+ */
 public class MainSpillLoop
 {
 	static List<Entity> staticObjects = new ArrayList<Entity>();
@@ -63,6 +68,10 @@ public class MainSpillLoop
 	private static TerrainTexture blendMap;
 	private static float lumen = 100.5f;
 
+	/**
+	 * Program-loop
+	 * @param args
+	 */
 	public static void main(String[] args) {
 
 		DisplayManager.createDisplay();
@@ -385,13 +394,23 @@ public class MainSpillLoop
 	}
 */
 
-
+/**
+ * Lager en animert model utifra data om modellen og en tekstur
+ * @param entityData Data om modellen. Se {@link AnimatedModelData}
+ * @param texture Tekstur til en modell. Se {@link TexturedModel}
+ * @return En animert modell. Se {@link AnimatedModel}
+ */
 	public static AnimatedModel loadEntity(AnimatedModelData entityData, TexturedModel texture) {
 		SkeletonData skeletonData = entityData.getJointsData();
 		Joint headJoint = createJoints(skeletonData.headJoint);
 		return new AnimatedModel(texture, headJoint, skeletonData.jointCount);
 	}
 
+	/**
+	 * Lager et ledd i en modell basert pÃ¥ data om leddet
+	 * @param data Data om leddet. Se {@link JointData}
+	 * @return Et ledd. Se {@link Joint}
+	 */
 	private static Joint createJoints(JointData data) {
 		Joint joint = new Joint(data.index, data.nameId, data.bindLocalTransform);
 		for (JointData child : data.children) {
@@ -401,6 +420,9 @@ public class MainSpillLoop
 	}
 
 	/**
+	 * Hentet ut av AnimationLoader. Klassen og metoden er laget av ThinMatrix.
+	 * Kommentert av ThinMatrix
+	 * 
 	 * Creates a keyframe from the data extracted from the collada file.
 	 * 
 	 * @param data
@@ -418,6 +440,10 @@ public class MainSpillLoop
 	}
 
 	/**
+	 * 
+	 * Hentet ut av AnimationLoader. Klassen og metoden er laget av ThinMatrix.
+	 * Kommentert av ThinMatrix
+	 * 
 	 * Creates a joint transform from the data extracted from the collada file.
 	 * 
 	 * @param data
@@ -447,6 +473,11 @@ public class MainSpillLoop
 		return new Animation(frames, animationData.lengthSeconds);
 	}
 
+	/**
+	 * Laster et Blend Map med multi-texturing ved bruk av en loader
+	 * Inspirert av ThinMatrix
+	 * @param loader Se {@link Loader}
+	 */
 	private static void loadTerrainPack(Loader loader) {
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("terrain/grass")); // Svart
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("terrain/mud2")); // Rï¿½d
@@ -458,6 +489,10 @@ public class MainSpillLoop
 
 	}
 
+	/**
+	 * Metode for Ã¥ lage lys i en 3D-verden
+	 * @return Liste av {@link Light}
+	 */
 	private static List<Light> createLights() {
 		List<Light> lights = new ArrayList<Light>();
 		Vector3f attenuation = new Vector3f(1f, 0.01f, 0.002f);
@@ -480,10 +515,13 @@ public class MainSpillLoop
 	}
 
 	
-	
+	/**
+	 * Lager Axis Align Bounding Boxes rundt statiske objekter fra en statisk liste	 
+	 * 
+	 * */
 	private static void createAABBs(){
 		
-		// Lager AABB basert på posisjonene og størrelses skalaen. 
+		// Lager AABB basert pï¿½ posisjonene og stï¿½rrelses skalaen. 
 		for (Entity ent : staticObjects) {
 			float scale = ent.getScale();
 			Vector3f scaledMax = new Vector3f(
@@ -504,7 +542,10 @@ public class MainSpillLoop
 		}
 	}
 	
-	
+	/**
+	 * Lager bokser som brukes til Ã¥ vise konseptet Axis Align Bounding Box
+	 * @param loader Se {@link Loader}
+	 */
 	private static void createJumpBoxes(Loader loader){
 		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
 		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
