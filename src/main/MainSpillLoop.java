@@ -116,11 +116,12 @@ public class MainSpillLoop
 		Entity kasse1 = new Entity(kasse1TexturedModel, new Vector3f(195,0,30), 0, 0, 0, 1f);
 		staticObjects.add(kasse1);
 
-		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
+		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("orange"));
 		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse1Texture);
 		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(175,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse2);
+		
 //*************** Objects in front of destination portal ******************************************************		
 		Entity kasse3 = new Entity(kasse2TexturedModel, new Vector3f(155,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse3);
@@ -138,6 +139,7 @@ public class MainSpillLoop
 		TexturedModel kasse5TexturedModel = new TexturedModel(kasse5Raw, kasse5Texture);
 		Entity kasse5 = new Entity(kasse5TexturedModel, kassePosition, 0, 1, 00, boxScale);
 		staticObjects.add(kasse5);
+		
 //********************PORTALS ************************************************************************
 		PortalFrameBuffers portal1FBO = new PortalFrameBuffers();
 		PortalShader portal1Shader = new PortalShader();
@@ -497,7 +499,7 @@ public class MainSpillLoop
 	 * @param loader Se {@link Loader}
 	 */
 	private static void createJumpBoxes(Loader loader){
-		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
+		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("orange"));
 		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse2Texture);
 
