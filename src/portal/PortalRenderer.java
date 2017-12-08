@@ -16,7 +16,11 @@ import render.Loader;
 import toolbox.Maths;
 import entiies.Camera;
 import entiies.Light;
- 
+ /**
+  * Modifisering av vann tutorial fra ThinMatrix
+  * @author Marius
+  *
+  */
 public class PortalRenderer {
  
     private RawModel quad;

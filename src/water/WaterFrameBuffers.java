@@ -21,7 +21,7 @@ import org.lwjgl.opengl.GL42;
  * Denne klassen gjør det mulig å rendre til egendefinerte frame buffer objekts
  * i stedet for den defaulte frame bufferen
  * @author Marius
- *
+ * Skrevet fra ThinMatrix water tutorial 
  */
 public class WaterFrameBuffers {
  
