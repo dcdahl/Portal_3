@@ -17,9 +17,14 @@ import org.lwjgl.opengl.GL33;
 import org.lwjgl.opengl.GL40;
 import org.lwjgl.opengl.GL42;
  
+/**
+ * Mye er likt i denne klassen som vann pakken siden portalene er basert på samme prinsipp
+ * @author Marius
+ *
+ */
 public class PortalFrameBuffers {
  
-	//Set the resolution of the refelction texture
+	//Disse bestemmer oppløsningen på refleksjonen
     protected static final int REFLECTION_WIDTH = 1280;
     private static final int REFLECTION_HEIGHT = 720;
  
@@ -27,97 +32,90 @@ public class PortalFrameBuffers {
     private int reflectionTexture;
     private int reflectionDepthBuffer;
  
-    public PortalFrameBuffers() {//call when loading the game
-        initialiseReflectionFrameBuffer();
+    public PortalFrameBuffers() {
+        initReflectionFBO();
     }
- 
-    public void cleanUp() {//call when closing the game
+    
+    //Sletter alle bundet FBOs, textures og renderbuffers
+    //Blir kjørt når man lukker spillet
+    public void cleanUp() {
         GL30.glDeleteFramebuffers(reflectionFrameBuffer);
         GL11.glDeleteTextures(reflectionTexture);
         GL30.glDeleteRenderbuffers(reflectionDepthBuffer);
     }
  
-    public void bindReflectionFrameBuffer() {//call before rendering to this FBO
-        bindFrameBuffer(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);
+  //Binder FBOen for refleksjon slik at vi kan rendre til FBO i stedet for default frame buffer 
+    public void bindReflectionFBO() {
+        bindFBO(reflectionFrameBuffer,REFLECTION_WIDTH,REFLECTION_HEIGHT);
     }
      
-     
-    //Call this to unbind the currently bound FBO, will then start rendering to the default frame buffer again
-    public void unbindCurrentFrameBuffer() {
+    //Kjør før man bytter FBO eller vil tilbake til default frame buffer
+    public void unbindFBO() {
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
         GL11.glViewport(0, 0, Display.getWidth(), Display.getHeight());
     }
  
-    public int getReflectionTexture() {//get the resulting texture
+    public int getReflectionTexture() {
         return reflectionTexture;
     }
-
-    private void initialiseReflectionFrameBuffer() {
-        reflectionFrameBuffer = createFrameBuffer();
+    
+    //Trenger IKKE å teksturere dybdeinformasjonen, men trengr det fortsatt for ikke å ha for "flatt" bildet på refleksjon
+    private void initReflectionFBO() {
+        reflectionFrameBuffer = createFBO();
         reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
         reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
-        unbindCurrentFrameBuffer();
+        unbindFBO();
     }
      
-    /**
-     * This will tell OpenGL to render to a FBO instead of the default frame buffer.
-     * @param frameBuffer Which FBO to render to 
-     * @param width
-     * @param height
-     */
-    private void bindFrameBuffer(int frameBuffer, int width, int height){
-    	//Making sure the texture is NOT bound
+     //Binder FBO så vi kan rendre til denne FBOen i stedet for den defaulte frame bufferen
+    private void bindFBO(int frameBuffer, int width, int height){
+    	 //Forsørge at vi ikke har bundet noen textures før vi binder FBOen 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer);
-        //Change the resolution of the viewport to the resolution of the FBO
+        //Endrer oppløsningen på viewporten til oppløsningen på FBOen
         GL11.glViewport(0, 0, width, height);
     }
  
-    /**
-     * Creates a new frame buffer
-     * @return The id of the created frame buffer
-     */
-    private int createFrameBuffer() {
-    	//Id of a new frame buffer
+
+    //Lager en FBO
+    private int createFBO() {
+    	//Lager FBO og lagrer IDen til FBOen
         int frameBuffer = GL30.glGenFramebuffers();
-        //Bind the frame buffer so that we can use it
+        //Binder FBOen så vi kan bruke den 
         GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, frameBuffer);
-        //Which color buffer attachement to render to, in this case we will use attchment 0
+        //Indikerer at vi alltid skal rendrere til COLOR attachment 0 når vi rendrer FBOene. 
+        //Vi må velge en color attachment å rendre til når vi skal bruke FBO, hvilken color buffer tilhørende FBOen som vi skal bruke
+        // I dette tilfellet nr 0
         GL11.glDrawBuffer(GL30.GL_COLOR_ATTACHMENT0);
         return frameBuffer;
     }
  
-    /**
-     * Adds a color buffer texture attachment to the currently bound FBO
-     * @param width Texture width
-     * @param height Texture height
-     * @return Id of the bound texture
-     */
+  //Lager en color buffer texture attachment og legger den til FBOen som er bundet
     private int createTextureAttachment( int width, int height) {
+    	//Lager navnet til texturen 
         int texture = GL11.glGenTextures();
+        //Binder texturen 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+        //Binder texturen 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height,
                 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-       //Adds the textureAttachment to the currently bound FBO
+        //legger til texture attachment til FBOen
+        //Vi bruker ikke noe mipmap så vi setter 0 på mipmap level
         GL32.glFramebufferTexture(GL30.GL_FRAMEBUFFER, GL30.GL_COLOR_ATTACHMENT0,
                 texture, 0);
         return texture;
     }
  
-    /**
-     * Creates a depthbuffer attachment that is NOT a texture
-     * @param width Texture width
-     * @param height Texture Height
-     * @return Id of the renderbuffer
-     */
+  //Legge til en depth buffer som IKKE er en texture AKA render buffers
     private int createDepthBufferAttachment(int width, int height) {
         int depthBuffer = GL30.glGenRenderbuffers();
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthBuffer);
+        //Legger til i frame bufferen som depth-attachment
         GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, width,
                 height);
-        //Adds it to the FBO as a depth attachment
+        //Legger til i frame bufferen som depth-attachment
         GL30.glFramebufferRenderbuffer(GL30.GL_FRAMEBUFFER, GL30.GL_DEPTH_ATTACHMENT,
                 GL30.GL_RENDERBUFFER, depthBuffer);
         return depthBuffer;

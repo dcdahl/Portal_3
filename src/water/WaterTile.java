@@ -2,8 +2,10 @@ package water;
  
 public class WaterTile {
      
+	//Størrelsen på vannflisen
     public static final float TILE_SIZE = 600;
-     
+    
+    //Høyden er det samme som y verdien
     private float height;
     private float x,z;
      

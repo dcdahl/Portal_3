@@ -16,6 +16,7 @@ public class PortalTile {
         this.z = centerZ;
         this.y = centerY;
         this.position = new Vector3f(centerX,centerY,centerZ);
+        //Slik at du kun kan se gjennom portalen fra en side. Andre siden blir da usynlig
         this.normalVector = new Vector3f(0,0,-1);
     }
     

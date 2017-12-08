@@ -245,7 +245,7 @@ public class MainSpillLoop
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
 			// **********************PORTALS
-			portal1FBO.bindReflectionFrameBuffer();
+			portal1FBO.bindReflectionFBO();
 			float angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
 			//change.normalise();
 
@@ -268,9 +268,9 @@ public class MainSpillLoop
 			}
 
 			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, sourcePortal.getHeight()));
-			portal1FBO.unbindCurrentFrameBuffer();
+			portal1FBO.unbindFBO();
 
-			portal2FBO.bindReflectionFrameBuffer();
+			portal2FBO.bindReflectionFBO();
 			angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
 			sourcePortalCamera.setPosition(sourcePortalPosition);
 			sourcePortalCamera.rotate(angle);
@@ -297,7 +297,7 @@ public class MainSpillLoop
 			}
 			
 			renderer.render(lights, sourcePortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));
-			portal2FBO.unbindCurrentFrameBuffer();
+			portal2FBO.unbindFBO();
 
 			for(BoundingBox aabb: BoundingBox.getAABBList())
 				playerBB.intersects(aabb);

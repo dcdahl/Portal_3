@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL42;
  */
 public class WaterFrameBuffers {
  
-	//Disse bestemmer oppløsningen på refleksjonen
+	
     protected static final int REFLECTION_WIDTH = 1280;
     private static final int REFLECTION_HEIGHT = 720;
 
@@ -83,7 +83,7 @@ public class WaterFrameBuffers {
  
     //Trenger IKKE å teksturere dybdeinformasjonen, men trengr det fortsatt for ikke å ha for "flatt" bildet på refleksjon
     private void initReflectionFBO() {
-        reflectionFBO = bindFBO();
+        reflectionFBO = createFBO();
         reflectionTexture = createTextureAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
         reflectionDepthBuffer = createDepthBufferAttachment(REFLECTION_WIDTH,REFLECTION_HEIGHT);
         unbindFBO();
@@ -91,7 +91,7 @@ public class WaterFrameBuffers {
      
     //I refraksjon vil vi også teksturere forskjellige dybde i scenen så vi må teksturere med en depth buffer
     private void initRefractionFBO() {
-        refractionFBO = bindFBO();
+        refractionFBO = createFBO();
         refractionTexture = createTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
         refractionDepthTexture = createDepthTextureAttachment(REFRACTION_WIDTH,REFRACTION_HEIGHT);
         unbindFBO();
@@ -105,7 +105,7 @@ public class WaterFrameBuffers {
         GL11.glViewport(0, 0, width, height);
     }
  
-    private int bindFBO() {
+    private int createFBO() {
     	//Lager FBO og lagrer IDen til FBOen
     	int frameBuffer = GL30.glGenFramebuffers();
     	//Binder FBOen så vi kan bruke den 
@@ -123,10 +123,9 @@ public class WaterFrameBuffers {
         int texture = GL11.glGenTextures();
         //Binder texturen 
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
-        //Definerere texturen
+        //Binder texturen 
         GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGB, width, height,
                 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
-        //TODO
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
         //legger til texture attachment til FBOen
@@ -153,7 +152,7 @@ public class WaterFrameBuffers {
     private int createDepthBufferAttachment(int width, int height) {
         int depthBuffer = GL30.glGenRenderbuffers();
         GL30.glBindRenderbuffer(GL30.GL_RENDERBUFFER, depthBuffer);
-        //Sier at vi skal lagre dybe informasjon i bufferen
+        //Legger til i frame bufferen som depth-attachment
         GL30.glRenderbufferStorage(GL30.GL_RENDERBUFFER, GL11.GL_DEPTH_COMPONENT, width,
                 height);
         //Legger til i frame bufferen som depth-attachment
