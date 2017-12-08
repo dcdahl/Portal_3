@@ -2,9 +2,15 @@ package portal;
  
 import org.lwjgl.util.vector.Matrix4f;
 import shaders.ShaderProgram;
+import shaders.StaticShader;
 import toolbox.Maths;
 import entiies.Camera;
  
+/**
+ * Tilnærmet lik andre shadere for eksempel {@link StaticShader} og {@link WaterShader}
+ * @author Marius
+ *
+ */
 public class PortalShader extends ShaderProgram {
  
     private final static String VERTEX_FILE = "src/portal/portalVertex.txt";
@@ -32,6 +38,8 @@ public class PortalShader extends ShaderProgram {
         location_reflectionTexture = getUniformLocation("reflectionTexture");  
     }
     
+    //Laster opp en int til sampler2Dene som ligger i fragmentshaderen
+    //Her setter vi hvilken textureunit hver sampler skal sample fra
     public void connectTextureUnits() {
     	super.loadInt(location_reflectionTexture, 0);
     }

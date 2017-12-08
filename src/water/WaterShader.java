@@ -47,8 +47,6 @@ public class WaterShader extends ShaderProgram {
         location_lightPos = getUniformLocation("lightPos");
     }
  
-    //Laster opp en int til sampler2Dene som ligger i fragmentshaderen
-    //Her setter vi hvilken textureunit hver sampler skal sample fra
     public void connectTextureUnits() {
     	super.loadInt(location_reflectTex, 0);
     	super.loadInt(location_refractTex, 1);
