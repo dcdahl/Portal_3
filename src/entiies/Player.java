@@ -1,15 +1,13 @@
 package entiies;
 
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
-
 import animation.Animation;
 import animation.Animator;
 import models.AnimatedModel;
-import models.TexturedModel;
+import models.BoundingBox;
 import render.DisplayManager;
+import render.MasterRenderer;
 import terrains.Terrain;
 
 public class Player extends AnimatedEntity{
@@ -25,16 +23,19 @@ public class Player extends AnimatedEntity{
 	private float currentTurnSpeed = 0;
 	private float upwardsSpeed = 0;
 	private boolean isInAir = false;
+	private BoundingBox boundingBox;
+	
 	
 	Animation animation;
 	Animator animator;
 	
 	
 	
-	public Player(AnimatedModel model, Animator animator, Animation animation, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public Player(AnimatedModel model, Animator animator, Animation animation, Vector3f position, float rotX, float rotY, float rotZ, float scale,BoundingBox boundingBox) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.animator = animator;
 		this.animation = animation;
+		this.boundingBox = boundingBox;
 	}
 	public Player(AnimatedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
@@ -44,38 +45,101 @@ public class Player extends AnimatedEntity{
 
 	public void move(Terrain terrain){
 		checkInputs();
+		
+		boundingBox.setCenterPosition(super.getPosition());
+		
+		// Finner rotasjonen som er foretatt. 
 		super.increaseRotation(0, currentTurnSpeed*DisplayManager.getFrameTimeSeconds(), 0 );
+		
+		// Finner hastigheten i Y-aksen om vi hopper. Om vi ikke hopper blir upwardsspeed = 0;
+		upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
+		
+		// Distansen vi skal bevege oss
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		
+		// Regner ut distansen i de forskjellige aksene
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
-		super.increasePosition(dx, 0, dz);
+		float dy = upwardsSpeed * DisplayManager.getFrameTimeSeconds();
 		
-		// Jump
-		upwardsSpeed += GRAVITY * DisplayManager.getFrameTimeSeconds();
-		super.increasePosition(0, upwardsSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+		// Finner terrenghøyden til popsisjonen vi er i nå. 
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
-		if(super.getPosition().y<terrainHeight){
-			upwardsSpeed = 0;
-			isInAir = false;
-			super.getPosition().y = terrainHeight;
+		
+		// Lager en ny vektor av bevegelsesdistansene. 
+		Vector3f movingDistance = new Vector3f(dx, dy, dz);
+		
+		// Legger de til den nåværende posisjonen for å finne punktet vi ønsker å gå til.
+		Vector3f newPosition = Vector3f.add(this.getPosition(), movingDistance, null);
+		boundingBox.setCenterPosition(newPosition);
+		
+		// Sjekker om vi krysser med noen av objektene i verden
+		BoundingBox intersectingBox = null;
+		boolean isIntersecting = false;
+		for (BoundingBox box : BoundingBox.getAABBList()) {
+			if(this.boundingBox.intersects(box)){
+				isIntersecting = true;
+				intersectingBox = box;
+			}
 		}
-		//System.out.println(super.getPosition());
+			
+		
+						
+		// Hvis vi ikke kommer til å krysse noe
+		if(!isIntersecting){
+			super.increasePosition(dx, dy, dz);
+			
+			if(super.getPosition().y < terrainHeight){
+				upwardsSpeed = 0;
+				isInAir = false;
+				super.getPosition().y = terrainHeight;
+			}
+		
+		// Hvis vi kommer til å krysse ovenfra etter et hopp (er i lufta)
+		}else if(newPosition.y < intersectingBox.getMax().y && this.getPosition().y > intersectingBox.getMax().y){
+
+				super.increasePosition(dx, 0, dz);
+				super.getPosition().y = intersectingBox.getMax().y; // Flytt spillern til toppen av boksen, så den ikke krysser med er akkurat på toppen.
+				isInAir = false;
+				upwardsSpeed = 0;
+		
+		// Hvis vi kommer til å krysse og er i lufta, men ikke er over objektet, da er vi på siden.
+		}else if(isInAir){
+			 if(super.getPosition().y < terrainHeight){
+					
+					upwardsSpeed = 0;
+					isInAir = false;
+					super.getPosition().y = terrainHeight;
+			}
+			super.increasePosition(0, dy, 0);
+		
+		// Hvis vi kommer til å krysse, men kommer ikke oppå objektet
+		}else if(this.getPosition().y < intersectingBox.getMax().y){
+			// Gjør ingenting
+			
+		// Ellers er vi oppå objektet, og skal kun bevege oss i z og x aksen for ikke å krysse med objektet. 
+		// Dette hindrer spillern fra å falle mot bakken og vi kan bevege oss på objektet.
+		}else{
+			super.increasePosition(dx, 0, dz);
+		}
+
 	}
+	
+	
+	
+	
+	
 	
 	private void jump(){
 		if(!isInAir){
 			this.upwardsSpeed = JUMP_POWER;
 			isInAir = true;
 		}
-			
-		
 	}
 	
 	
 	
 	
-	// Spiller bevegelse og keyboard input
+	// Spillerbevegelse og keyboard input
 	private void checkInputs() {
 		
 		// Frem og tilbake
@@ -96,9 +160,16 @@ public class Player extends AnimatedEntity{
 		else
 			this.currentTurnSpeed = 0;
 		
-		// JUMP
+		// Hopp
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE))
 			jump();
+		
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_X))
+			MasterRenderer.setPolygonMode(true);
+		
+		if(Keyboard.isKeyDown(Keyboard.KEY_C))
+			MasterRenderer.setPolygonMode(false);
 		
 		
 	}
@@ -108,10 +179,14 @@ public class Player extends AnimatedEntity{
 		return animator;
 	}
 	
-	public boolean isMoving()
-	{
+	public boolean isMoving(){
 		return currentSpeed > 0 || currentTurnSpeed > 0;
 	}
-	
+	public BoundingBox getBoundingBox() {
+		return boundingBox;
+	}
+	public void setBoundingBox(BoundingBox boundingBox) {
+		this.boundingBox = boundingBox;
+	}
 	
 }

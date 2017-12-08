@@ -19,6 +19,7 @@ import models.TexturedModel;
 import shaders.AnimatedShader;
 import shaders.StaticShader;
 import shaders.TerrainShader;
+import skybox.SkyboxRenderer;
 import terrains.Terrain;
 
 public class MasterRenderer {
@@ -35,13 +36,14 @@ public class MasterRenderer {
 	private TerrainRenderer terrainRenderer;
 	private TerrainShader terrainShader = new TerrainShader();
 	private List<Terrain> terrains = new ArrayList<Terrain>();
-	
+	private SkyboxRenderer skyboxRenderer;
+	private static boolean polygonMode = false;
 	
 	// Hashmap med liste over de forskjellige entitetene for hver modell.
 	private Map<TexturedModel,List<Entity>> entities = new HashMap<TexturedModel,List<Entity>>();
 	private Map<AnimatedModel,List<AnimatedEntity>> animatedEntities = new HashMap<AnimatedModel,List<AnimatedEntity>>();
 	
-	public MasterRenderer(){
+	public MasterRenderer(Loader loader){
 		// S�rger for at ikke hele objektet ikke blir rendret ( fjerner bakdelen )
 		//GL11.glEnable(GL11.GL_CULL_FACE);
 		//GL11.glCullFace(GL11.GL_BACK);
@@ -50,7 +52,7 @@ public class MasterRenderer {
 		renderer = new EntityRenderer(shader, projectionMatrix);
 		terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 		skeletonRenderer = new SkeletonRenderer(animatedShader, projectionMatrix);
-		
+		skyboxRenderer = new SkyboxRenderer(loader, projectionMatrix);
 	}
 	
 	public void render(List<Light> lights, Camera camera, Vector4f clipPlane){
@@ -73,7 +75,7 @@ public class MasterRenderer {
 		animatedShader.loadViewMatrix(camera);
 		skeletonRenderer.render(animatedEntities);
 		animatedShader.stop();
-		
+		skyboxRenderer.render(camera);
 		
 		terrains.clear();
 		entities.clear();
@@ -130,8 +132,14 @@ public class MasterRenderer {
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-		//GL11.glClearColor(0.220f, 0.220f, 0.220f, 1);
+		
 		GL11.glClearColor(0.49f, 89f, 0.98f, 1);
+		
+		if(polygonMode)
+			GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_LINE);
+		if(!polygonMode)
+			GL11.glPolygonMode( GL11.GL_FRONT_AND_BACK, GL11.GL_FILL );
+				
 	}
 	
 	public Matrix4f getProjectionMatrix(){
@@ -143,5 +151,15 @@ public class MasterRenderer {
 		terrainShader.cleanUp();
 		animatedShader.cleanUp();
 	}
+
+	public static boolean isPolygonMode() {
+		return polygonMode;
+	}
+
+	public static void setPolygonMode(boolean polyMode) {
+		polygonMode = polyMode;
+	}
+	
+	
 	
 }

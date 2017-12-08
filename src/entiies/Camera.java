@@ -106,7 +106,7 @@ public class Camera {
 			float angleChange = Mouse.getDX() * MOUSE_SENSETIVITY;
 			
 			float newPitch = pitch -= pitchChange;
-			System.out.println(newPitch);
+			//System.out.println(newPitch);
 			
 		
 			pitch -= pitchChange;

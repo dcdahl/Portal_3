@@ -32,6 +32,9 @@ public class GeometryLoader {
 	private int[] indicesArray;
 	private int[] jointIdsArray;
 	private float[] weightsArray;
+	
+	private Vector3f vecMax = null;
+	private Vector3f vecMin = null;
 
 	List<Vertex> vertices = new ArrayList<Vertex>();
 	List<Vector2f> textures = new ArrayList<Vector2f>();
@@ -50,7 +53,7 @@ public class GeometryLoader {
 		initArrays();
 		convertDataToArrays();
 		convertIndicesListToArray();
-		return new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, jointIdsArray, weightsArray);
+		return new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, jointIdsArray, weightsArray, vecMin, vecMax);
 	}
 
 	private void readRawData() {
@@ -70,8 +73,12 @@ public class GeometryLoader {
 			float z = Float.parseFloat(posData[i * 3 + 2]);
 			Vector4f position = new Vector4f(x, y, z, 1);
 			Matrix4f.transform(CORRECTION, position, position);
+			
+			// Lager max og min til boundingboxes
+			loadMaxAndMin(position.x, position.y, position.z); 
 			vertices.add(new Vertex(vertices.size(), new Vector3f(position.x, position.y, position.z), vertexWeights.get(vertices.size())));
 		}
+		
 	}
 
 	private void readNormals() {
@@ -203,6 +210,65 @@ public class GeometryLoader {
 				vertex.setNormalIndex(0);
 			}
 		}
+	}
+	
+	
+	private void loadMaxAndMin(float x, float y, float z){
+		
+		Vector3f vertex = new Vector3f(x,y,z);
+		
+		if(vecMax == null){
+			vecMax = new Vector3f(vertex.x, vertex.y, vertex.z);
+			vecMin = new Vector3f(vertex.x, vertex.y, vertex.z);
+		}
+		else{
+		if(vertex.x > vecMax.x)
+			vecMax.x = vertex.x;
+		if(vertex.y > vecMax.y)
+			vecMax.y = vertex.y;
+		if(vertex.z > vecMax.z)
+			vecMax.z = vertex.z;
+		
+		if(vertex.x < vecMin.x)
+			vecMin.x = vertex.x;
+		if(vertex.y < vecMin.y)
+			vecMin.y = vertex.y;
+		if(vertex.z < vecMin.z)
+			vecMin.z = vertex.z;
+		}
+		
+		
+		
+		
+		
+		
+		/*
+		
+		
+		Vector3f vec;
+		
+		for (Vertex vertex : vertices) {
+			
+			vec = vertex.getPosition();
+			
+			if(vec.x > vecMax.x)
+				vecMax.x = vec.x;
+			if(vec.y > vecMax.y)
+				vecMax.y = vec.y;
+			if(vec.z > vecMax.z)
+				vecMax.z = vec.z;
+			
+			if(vec.x < vecMin.x)
+				vecMin.x = vec.x;
+			if(vec.y < vecMin.y)
+				vecMin.y = vec.y;
+			if(vec.z < vecMin.z)
+				vecMin.z = vec.z;
+		}
+		
+*/
+		
+		
 	}
 	
 }
