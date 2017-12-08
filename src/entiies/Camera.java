@@ -2,6 +2,7 @@ package entiies;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
@@ -21,13 +22,12 @@ public class Camera {
 	private Vector3f position = new Vector3f(0,5,0);
 	private float pitch = 10, yaw = 0, roll; 
 
-
 	private Player player;
-	
-	
+	private Matrix4f rotationMatrix = new Matrix4f();
 	
 	public Camera(Player player){
 		this.player = player;
+		
 	}
 	
 	public Camera() {}
@@ -53,7 +53,12 @@ public class Camera {
 		
 		
 		this.yaw = 180 - (player.getRotX() + angleAroundPlayer);
-		
+		rotationMatrix = Matrix4f.rotate(angleAroundPlayer, new Vector3f(0,roll,0), rotationMatrix, null);
+	}
+	
+	public Matrix4f getRotationMatrix()
+	{
+		return rotationMatrix;	
 	}
 	
 
@@ -103,11 +108,7 @@ public class Camera {
 	private void calculatePitchAndAngleAroundPlayer(){
 		if(Mouse.isButtonDown(2)){
 			float pitchChange = Mouse.getDY() * MOUSE_SENSETIVITY;
-			float angleChange = Mouse.getDX() * MOUSE_SENSETIVITY;
-			
-			float newPitch = pitch -= pitchChange;
-			System.out.println(newPitch);
-			
+			float angleChange = Mouse.getDX() * MOUSE_SENSETIVITY;	
 		
 			pitch -= pitchChange;
 			angleAroundPlayer -= angleChange;

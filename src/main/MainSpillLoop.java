@@ -113,12 +113,13 @@ public class MainSpillLoop {
 		TexturedModel kasse1TexturedModel = new TexturedModel(kasse1Raw, kasse1Texture);
 		Entity kasse1 = new Entity(kasse1TexturedModel, new Vector3f(85, 0, 110), 0, 0, 0, 1f);
 		staticObjects.add(kasse1);
-
+/*
 		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
 		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse1Texture);
 		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(95, 0, 100), 0, 0, 0, 4f);
 		staticObjects.add(kasse2);
+		*/
 		// *************** Objects in front of destination portal
 		// ******************************************************
 		ModelTexture kasse3Texture = new ModelTexture(loader.loadTexture("Moon"));
@@ -187,18 +188,22 @@ public class MainSpillLoop {
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
 		// ********** PORTAL CAMERAS *************************************************
-		PortalCamera sourcePortalCamera = new PortalCamera(destPortal);
-		PortalCamera destinationPortalCamera = new PortalCamera(sourcePortal);
+		PortalCamera sourcePortalCamera = new PortalCamera(destPortal,player);
+		PortalCamera destinationPortalCamera = new PortalCamera(sourcePortal,player);
 
 		// ***************************************************************************
 		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
 		Vector3f sourcePortalPosition = new Vector3f(sourcePortal.getX(), 1f, sourcePortal.getZ() + 10);
 		Vector3f entryPortalPosition = new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10);
+		destinationPortalCamera.setPosition(entryPortalPosition);
+		sourcePortalCamera.setPosition(sourcePortalPosition);
 
 		while (!Display.isCloseRequested()) {
 			// Vector3f old = camera.getPosition();
 			// Aktiverer bevegelse av kamera
 			camera.move();
+			destinationPortalCamera.move();
+			sourcePortalCamera.move();
 
 			// Spillerbevegelse
 			player.move(terrain);
@@ -217,14 +222,13 @@ public class MainSpillLoop {
 			fbos.bindReflectionFrameBuffer();
 
 			float angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
-			//change.normalise();
+			// change.normalise();
 
-			
-			//entryPortalPosition = SetPortalPosition(camera,destinationPortalCamera.getCameraNormal());
-			
-			destinationPortalCamera.setPosition(entryPortalPosition);
-			destinationPortalCamera.rotate(angle);
-			//destinationPortalCamera.setPitch(0);
+			// entryPortalPosition =
+			// SetPortalPosition(camera,destinationPortalCamera.getCameraNormal());
+
+			// destinationPortalCamera.rotate(angle);
+			// destinationPortalCamera.setPitch(0);
 
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
@@ -236,7 +240,7 @@ public class MainSpillLoop {
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
 
-			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, sourcePortal.getHeight()));
+			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, sourcePortal.getHeight()),camera.getRotationMatrix());
 			// renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0,
 			// destPortal.getHeight()));
 			// xd.invertPitch();
@@ -244,15 +248,14 @@ public class MainSpillLoop {
 
 			ok.bindReflectionFrameBuffer();
 
-			//change = Vector3f.sub(camera.getPosition(), sourcePortalPosition, null);
+			// change = Vector3f.sub(camera.getPosition(), sourcePortalPosition, null);
 			angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
-			//change.normalise();
-			//sourcePortalPosition.x += change.x;
-			//sourcePortalPosition.y += change.y;
-			
-			sourcePortalCamera.setPosition(sourcePortalPosition);
-			sourcePortalCamera.rotate(angle);
-			//sourcePortalCamera.setPitch(0);
+			// change.normalise();
+			// sourcePortalPosition.x += change.x;
+			// sourcePortalPosition.y += change.y;
+
+			// sourcePortalCamera.rotate(angle);
+			// sourcePortalCamera.setPitch(0);
 
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
@@ -263,8 +266,8 @@ public class MainSpillLoop {
 
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
-
-			renderer.render(lights, sourcePortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));
+			
+			renderer.render(lights, sourcePortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()),camera.getRotationMatrix());
 			// renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0,
 			// destPortal.getHeight()));
 			// xd.invertPitch();
@@ -301,20 +304,19 @@ public class MainSpillLoop {
 		DisplayManager.closeDisplay();
 
 	}
-
+/*
 	private static Vector3f SetPortalPosition(Camera camera, Vector3f portalNormal) {
-		
+
 		Vector3f difference = Vector3f.sub(camera.getPosition(), portalNormal, null);
 		difference.normalise();
 		Vector3f v = Vector3f.cross(portalNormal, difference, null);
 		Matrix3f m = Maths.createMatrix3fFromVector3f(v);
 		float sinus = v.length();
 		float cosinus = Vector3f.dot(portalNormal, difference);
-		
-		
+
 		return null;
 	}
-
+*/
 	/*
 	 * Fors�k p� � f� jorden til � g� i bane rundt solen Work in progress :-)
 	 */

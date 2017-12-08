@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
 
+/**
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
+ * Inneholder all data om en verteks
+ *
+ */
 public class Vertex {
 	
 	private static final int NO_INDEX = -1;

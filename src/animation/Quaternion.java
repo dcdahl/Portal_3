@@ -3,8 +3,10 @@ package animation;
 import org.lwjgl.util.vector.Matrix4f;
 
 
-/* Hentet fra et pårosjekt av ThinMatrix ( See <a href="https://www.youtube.com/watch?v=cieheqt7eqc&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=55">ThinMatrix, Skeleton tutorial</a>)
-/**
+/* Laget av ThinMatrix ( See <a href="https://www.youtube.com/watch?v=cieheqt7eqc&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=55">ThinMatrix, Skeleton animation video 3</a>)
+ * Kommmentarer av ThinMatrix
+ *  
+ * 
  * A quaternion simply represents a 3D rotation. The maths behind it is quite
  * complex (literally; it involves complex numbers) so I wont go into it in too
  * much detail. The important things to note are that it represents a 3d

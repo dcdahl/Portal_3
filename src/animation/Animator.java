@@ -8,6 +8,9 @@ import render.*;
 import models.*;
 
 /**
+ * Klasse laget av ThinMatrix (see <a href="https://www.youtube.com/watch?v=F-kcaonjHf8">ThinMatrix Skeleton Animation video 2</a>).
+ * Denne klassen er ikke endret på, men skrevet nesten rett av
+ * Kommentarer er skrevet av ThinMatrix
  * 
  * This class contains all the functionality to apply an animation to an
  * animated entity. An Animator instance is associated with just one

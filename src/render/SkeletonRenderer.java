@@ -20,6 +20,11 @@ import shaders.StaticShader;
 import textures.ModelTexture;
 import toolbox.Maths;
 
+/**
+ * Klasse for håndtering av rendering av animerte objekter
+ * @author Windows10
+ *
+ */
 public class SkeletonRenderer
 {
 	private AnimatedShader shader;

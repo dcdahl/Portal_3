@@ -3,6 +3,11 @@ package dataStructures;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>) 
+ *Data om alle ledd i et skjelett og hvor mye hver verteks blir påvirket av leddet
+ *
+ */
 public class VertexSkinData {
 	
 	public final List<Integer> jointIds = new ArrayList<Integer>();

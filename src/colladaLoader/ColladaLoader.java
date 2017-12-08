@@ -9,8 +9,19 @@ import dataStructures.SkinningData;
 import xmlParser.XmlNode;
 import xmlParser.XmlParser;
 
+/**
+ * Loader som henter all informasjon om en animasjon og en model fra en COLLADA-fil
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
+ *Kommentarer skrevet selv.
+ */
 public class ColladaLoader {
 
+	/**
+	 * Metode for å hente data om meshen fra en model pg tilhørende ledd fra en COLLADA-fil
+	 * @param colladaFile COLLADA-filen. Se {@link MyFile}
+	 * @param maxWeights Maks antall ledd som et ledd kan påvirkes av ved transformering
+	 * @return Data om modellen og alle ledd tyilhørende modellen. Se {@link AnimatedModelData}
+	 */
 	public static AnimatedModelData loadColladaModel(MyFile colladaFile, int maxWeights) {
 		XmlNode node = XmlParser.loadXmlFile(colladaFile);
 
@@ -26,6 +37,11 @@ public class ColladaLoader {
 		return new AnimatedModelData(meshData, jointsData);
 	}
 
+	/**
+	 * Metode for å hente all data om en animasjon fra en COLLADA-fil
+	 * @param colladaFile COLLADA-filen
+	 * @return Data om animasjonen. Se {@link AnimationData}}
+	 */
 	public static AnimationData loadColladaAnimation(MyFile colladaFile) {
 		XmlNode node = XmlParser.loadXmlFile(colladaFile);
 		XmlNode animNode = node.getChild("library_animations");

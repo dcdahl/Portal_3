@@ -14,6 +14,7 @@ import entiies.AnimatedEntity;
 import entiies.Camera;
 import entiies.Entity;
 import entiies.Light;
+import entiies.PortalCamera;
 import models.AnimatedModel;
 import models.TexturedModel;
 import shaders.AnimatedShader;
@@ -73,7 +74,6 @@ public class MasterRenderer {
 		animatedShader.loadViewMatrix(camera);
 		skeletonRenderer.render(animatedEntities);
 		animatedShader.stop();
-		
 		
 		terrains.clear();
 		entities.clear();
@@ -142,6 +142,34 @@ public class MasterRenderer {
 		shader.cleanUp();
 		terrainShader.cleanUp();
 		animatedShader.cleanUp();
+	}
+
+	public void render(List<Light> lights, Camera camera, Vector4f clipPlane,
+			Matrix4f rotationMatrix) {
+		prepare();
+		shader.start();
+		shader.loadClipPlane(clipPlane);
+		shader.loadLights(lights);
+		shader.loadViewMatrix(camera);
+		renderer.render(entities);
+		shader.stop();
+		
+		terrainShader.start();
+		terrainShader.loadLights(lights);
+		terrainShader.loadViewMatrix(camera);
+		terrainRenderer.render(terrains);
+		terrainShader.stop();
+		
+		animatedShader.start();
+		animatedShader.loadLights(lights);
+		animatedShader.loadViewMatrix(camera);
+		skeletonRenderer.render(animatedEntities);
+		animatedShader.stop();
+		
+		terrains.clear();
+		entities.clear();
+		animatedEntities.clear();// m� v�re der for � ikke lage mange hvert frame uten � slette de,
+		
 	}
 	
 }

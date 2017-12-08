@@ -1,6 +1,7 @@
 package dataStructures;
 
 /**
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
  * This object contains all the mesh data for an animated model that is to be loaded into the VAO.
  * 
  * @author Karl
