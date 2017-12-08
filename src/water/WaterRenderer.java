@@ -17,6 +17,11 @@ import toolbox.Maths;
 import entiies.Camera;
 import entiies.Light;
  
+/**
+ * Skrevet fra ThinMatrix water tutorial 
+ * @author Marius
+ *
+ */
 public class WaterRenderer {
  
 	//Navnet på DuDv mappet

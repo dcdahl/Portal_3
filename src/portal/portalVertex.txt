@@ -1,5 +1,5 @@
 #version 400 core
-
+//Modifisering av vann tutorial fra ThinMatrix
 in vec2 position;
 
 out vec4 clipSpace;

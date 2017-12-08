@@ -1,5 +1,10 @@
 package water;
- 
+
+/**
+ * Skrevet fra ThinMatrix water tutorial 
+ * @author Marius
+ *
+ */
 public class WaterTile {
      
 	//Størrelsen på vannflisen
