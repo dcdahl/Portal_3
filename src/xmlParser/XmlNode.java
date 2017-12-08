@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
+ * Kommentarer skrevet av ThinMatrix
+ * 
  * Represents a node in an XML file. This contains the name of the node, a map
  * of the attributes and their values, any text data between the start and end
  * tag, and a list of all its children nodes.
