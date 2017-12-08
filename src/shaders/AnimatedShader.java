@@ -5,10 +5,16 @@ import java.util.List;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
+import animation.JointTransform;
 import entiies.Camera;
 import entiies.Light;
 import toolbox.Maths;
 
+/**
+ * Shader for animerte figurer
+ * @author Jonatan Bårdsen
+ *
+ */
 public class AnimatedShader extends ShaderProgram
 {
 	private static final int MAX_LIGHTS = 4;
@@ -25,21 +31,24 @@ public class AnimatedShader extends ShaderProgram
 	private int location_shineDamper;
 	private int location_reflectivity;
 	
+	/**
+	 * Konstruktør
+	 */
 	public AnimatedShader()
 	{
 		super(VERTEX_FILE, FRAGMENT_FILE);
 	
 	}
 
+	/**
+	 * Henter adressen i minnet for variabler som brukes i shaderen
+	 */
 	@Override
 	protected void getAllUniformLocations()
 	{
 		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
 		location_projectionMatrix = super.getUniformLocation("projectionMatrix");
 		location_viewMatrix = super.getUniformLocation("viewMatrix");
-
-		//location_jointTransforms = super.getUniformLocation("jointTransforms");
-		
 		
 		location_shineDamper = super.getUniformLocation("shineDamper");
 		location_reflectivity = super.getUniformLocation("reflectivity");
@@ -72,6 +81,10 @@ public class AnimatedShader extends ShaderProgram
 
 	}
 
+	/**
+	 * Laster lys-objekter til shaderen
+	 * @param lights Liste med {@link Light}
+	 */
 	public void loadLights(List<Light> lights){
 		for (int i = 0; i < MAX_LIGHTS; i++) {
 			if(i<lights.size()){
@@ -86,26 +99,36 @@ public class AnimatedShader extends ShaderProgram
 		}
 	}
 	
-	/*
-	public void loadLight(Light light){
-		super.loadVector(location_lightPosition, light.getPosition());
-		super.loadVector(location_lightColour, light.getColour());
-	}*/
-	
+	/**
+	 * Laster transformasjon-matrisen til shaderen
+	 * @param matrix Transformasjon-matrisen
+	 */
 	public void loadTransformationMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_transformationMatrix, matrix);
 	}
 	
+	/**
+	 * Laster projeksjon-matrisen til shaderen
+	 * @param projection
+	 */
 	public void loadProjectionMatrix(Matrix4f projection){
 		super.loadMatrix(location_projectionMatrix, projection);
 	}
 	
+	/**
+	 * Laster en view-matrise fra et {@link Camera}
+	 * @param camera Se {@link Camera}
+	 */
 	public void loadViewMatrix(Camera camera){
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
 
-	//Brukes ikke ennå
+	/**
+	 * Laster variabler for hvordan lys reflekteres til shaderen
+	 * @param shineDamper
+	 * @param reflectivity
+	 */
 	public void loadShineVariables(float shineDamper, float reflectivity)
 	{
 		super.loadFloat(location_reflectivity, reflectivity);
@@ -113,6 +136,10 @@ public class AnimatedShader extends ShaderProgram
 		
 	}
 	
+	/**
+	 * Laster en liste med {@link JointTransform} i matrise-form til shaderen
+	 * @param matrices JointTransforms som matriser
+	 */
 	public void loadJointTransforms(Matrix4f[] matrices)
 	{
 		
@@ -120,7 +147,7 @@ public class AnimatedShader extends ShaderProgram
 		{
 			int location_matrixArrayElement = super.getUniformLocation("jointTransforms[" + i + "]");
 			super.loadMatrix(location_matrixArrayElement, matrices[i]);
-			System.out.println(i);
+			//System.out.println(i);
 		}
 	}
 

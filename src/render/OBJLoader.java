@@ -10,6 +10,7 @@ import java.util.List;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import dataStructures.Vertex;
 import models.RawModel;
 /**
  * 
@@ -18,7 +19,7 @@ import models.RawModel;
  * 
  */
 public class OBJLoader {
-
+	
 	
 	public static RawModel loadObjModel(String filename, Loader loader){
 		FileReader fr = null;
@@ -32,6 +33,8 @@ public class OBJLoader {
 		}
 		BufferedReader reader = new BufferedReader(fr);
 		String line;
+		Vector3f vecMax = null;
+		Vector3f vecMin = null;
 		List<Vector3f> vertices = new ArrayList<Vector3f>();
 		List<Vector2f> textures = new ArrayList<Vector2f>();
 		List<Vector3f> normals = new ArrayList<Vector3f>();
@@ -48,8 +51,32 @@ public class OBJLoader {
 				//line = reader.readLine();
 				String[] currentLine = line.split(" ");
 				if(line.startsWith("v ")){
+					// Lager en vektor basert på verdiene som leses inn på linjen
 					Vector3f vertex = new Vector3f(Float.parseFloat(currentLine[1]),
 							Float.parseFloat(currentLine[2]),Float.parseFloat(currentLine[3]));
+					
+					// Hvis det er første gjennomkjøring, lager vi nye vektorer.
+					if(vecMax == null){
+						vecMax = new Vector3f(vertex.x, vertex.y, vertex.z);
+						vecMin = new Vector3f(vertex.x, vertex.y, vertex.z);
+					}
+					else{
+						// Sjekker om verdiene er høyere enn den høyeste sålangt.
+						if(vertex.x > vecMax.x)
+							vecMax.x = vertex.x;
+						if(vertex.y > vecMax.y)
+							vecMax.y = vertex.y;
+						if(vertex.z > vecMax.z)
+							vecMax.z = vertex.z;
+						
+						// Sjekker om verdiene er lavere enn den laveste sålangt.
+						if(vertex.x < vecMin.x)
+							vecMin.x = vertex.x;
+						if(vertex.y < vecMin.y)
+							vecMin.y = vertex.y;
+						if(vertex.z < vecMin.z)
+							vecMin.z = vertex.z;
+					}
 					vertices.add(vertex);
 				}else if(line.startsWith("vt ")){
 					Vector2f texture = new Vector2f(Float.parseFloat(currentLine[1]),
@@ -79,7 +106,8 @@ public class OBJLoader {
 				processVertex(vertex3, indices, textures, normals, textureArray, normalsArray);
 
 			}
-			
+			System.out.println(filename + ": Max-X: " + vecMax.x + " Max-Y: " + vecMax.y + " Max-Z: " + vecMax.z);
+			System.out.println(filename + ": Min-X: " + vecMin.x + " Min-Y: " + vecMin.y + " Min-Z: " + vecMin.z);
 
 			reader.close();
 			
@@ -104,7 +132,10 @@ public class OBJLoader {
 		for(int i= 0;i<indices.size();i++)
 			indicesArray[i] = indices.get(i);
 		
-		return loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray);
+		RawModel rm = loader.loadToVAO(verticesArray, indicesArray, textureArray, normalsArray);
+		rm.setVecMax(vecMax);
+		rm.setVecMin(vecMin);
+		return rm;
 
 	}
 	
@@ -126,7 +157,5 @@ public class OBJLoader {
 		normalsArray[currentVertexPointer*3+1] = currentNorm.y;
 		normalsArray[currentVertexPointer*3+2] = currentNorm.z;
 	}
-	
-
 	
 }

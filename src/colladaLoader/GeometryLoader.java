@@ -14,35 +14,55 @@ import dataStructures.VertexSkinData;
 import xmlParser.XmlNode;
 
 /**
- * Loads the mesh data for a model from a collada XML file.
- * @author Karl
+ * 
+ * 
+ * Loader som henter all informasjon om gemoetrien (meshen) til en model fra en COLLADA-fil
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
+ *Kommentarer skrevet selv.
+ *
  *
  */
 public class GeometryLoader {
-
+//På grunn av at Blender har z-aksen oppover
 	private static final Matrix4f CORRECTION = new Matrix4f().rotate((float) Math.toRadians(-90), new Vector3f(1, 0,0));
-	
+	//Data om meshen i en XML-node
 	private final XmlNode meshData;
 
+	//Liste med data om "huden" til modellen
 	private final List<VertexSkinData> vertexWeights;
 	
+	//arrayer med data om modellen
 	private float[] verticesArray;
 	private float[] normalsArray;
 	private float[] texturesArray;
 	private int[] indicesArray;
 	private int[] jointIdsArray;
 	private float[] weightsArray;
+	
+	private Vector3f vecMax = null;
+	private Vector3f vecMin = null;
 
+	//Lister for å håndtere vertekser, tekstur, normaler og indekser  
 	List<Vertex> vertices = new ArrayList<Vertex>();
 	List<Vector2f> textures = new ArrayList<Vector2f>();
 	List<Vector3f> normals = new ArrayList<Vector3f>();
 	List<Integer> indices = new ArrayList<Integer>();
 	
+	
+	/**
+	 * Konstruktør for klassen
+	 * @param geometryNode XML-node med all informasjon om geometrien til modellen
+	 * @param vertexWeights Liste med data om hvor mye meshene påvirkes av bevegelser til andre ledd
+	 */
 	public GeometryLoader(XmlNode geometryNode, List<VertexSkinData> vertexWeights) {
 		this.vertexWeights = vertexWeights;
 		this.meshData = geometryNode.getChild("geometry").getChild("mesh");
 	}
 	
+	/**
+	 * Henter data om en enkelt mesh fra en XML-struktur
+	 * @return Data om meshen. Se {@link MeshData}
+	 */
 	public MeshData extractModelData(){
 		readRawData();
 		assembleVertices();
@@ -50,15 +70,21 @@ public class GeometryLoader {
 		initArrays();
 		convertDataToArrays();
 		convertIndicesListToArray();
-		return new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, jointIdsArray, weightsArray);
+		return new MeshData(verticesArray, texturesArray, normalsArray, indicesArray, jointIdsArray, weightsArray, vecMin, vecMax);
 	}
 
+	/**
+	 * Leser rådata fra XML-struktur
+	 */
 	private void readRawData() {
 		readPositions();
 		readNormals();
 		readTextureCoords();
 	}
 
+	/**
+	 * Leser verteks-posisjoner for en modell fra  en XML-struktur
+	 */
 	private void readPositions() {
 		String positionsId = meshData.getChild("vertices").getChild("input").getAttribute("source").substring(1);
 		XmlNode positionsData = meshData.getChildWithAttribute("source", "id", positionsId).getChild("float_array");
@@ -70,10 +96,17 @@ public class GeometryLoader {
 			float z = Float.parseFloat(posData[i * 3 + 2]);
 			Vector4f position = new Vector4f(x, y, z, 1);
 			Matrix4f.transform(CORRECTION, position, position);
+			
+			// Lager max og min til boundingboxes
+			loadMaxAndMin(position.x, position.y, position.z); 
 			vertices.add(new Vertex(vertices.size(), new Vector3f(position.x, position.y, position.z), vertexWeights.get(vertices.size())));
 		}
+		
 	}
 
+	/**
+	 * Leser verteks-normaler for en modell fra en XML-struktur
+	 */
 	private void readNormals() {
 		String normalsId = meshData.getChild("polylist").getChildWithAttribute("input", "semantic", "NORMAL")
 				.getAttribute("source").substring(1);
@@ -90,6 +123,9 @@ public class GeometryLoader {
 		}
 	}
 
+	/**
+	 * Leser tekstur-koordinater for en modell fra en XML-struktur
+	 */
 	private void readTextureCoords() {
 		String texCoordsId = meshData.getChild("polylist").getChildWithAttribute("input", "semantic", "TEXCOORD")
 				.getAttribute("source").substring(1);
@@ -103,6 +139,9 @@ public class GeometryLoader {
 		}
 	}
 	
+	/**
+	 * setter sammen verteksene med indeksene, normalene og tekstur-koordinatene
+	 */
 	private void assembleVertices(){
 		XmlNode poly = meshData.getChild("polylist");
 		int typeCount = poly.getChildren("input").size();
@@ -116,6 +155,13 @@ public class GeometryLoader {
 	}
 	
 
+	/**
+	 * Setter dataene fra assembleVertices sammen
+	 * @param posIndex Indeksen på posisjonsdata på verteksen
+	 * @param normIndex Indeksen på normalen på verteksen
+	 * @param texIndex Indeksen på tekstur-koordinatet på verteksen
+	 * @return
+	 */
 	private Vertex processVertex(int posIndex, int normIndex, int texIndex) {
 		Vertex currentVertex = vertices.get(posIndex);
 		if (!currentVertex.isSet()) {
@@ -128,6 +174,10 @@ public class GeometryLoader {
 		}
 	}
 
+	/**
+	 * Konverterer en liste med verteks-indekser til en array 
+	 * @return En array med verteks-indekser
+	 */
 	private int[] convertIndicesListToArray() {
 		this.indicesArray = new int[indices.size()];
 		for (int i = 0; i < indicesArray.length; i++) {
@@ -136,10 +186,15 @@ public class GeometryLoader {
 		return indicesArray;
 	}
 
+	/**
+	 * Konverter listene med data om meshen til arrayer 
+	 * @return Punktet som er lengst vekk av verteksene
+	 */
 	private float convertDataToArrays() {
 		float furthestPoint = 0;
 		for (int i = 0; i < vertices.size(); i++) {
 			Vertex currentVertex = vertices.get(i);
+			//Brukes for å beregne AABB-bokser
 			if (currentVertex.getLength() > furthestPoint) {
 				furthestPoint = currentVertex.getLength();
 			}
@@ -166,6 +221,13 @@ public class GeometryLoader {
 		return furthestPoint;
 	}
 
+	/**
+	 * Metode som samler like vertekser i samme datastruktur.
+	 * @param previousVertex Forrige verteks. Se {@link Vertex}
+	 * @param newTextureIndex Indeks hvor tekstur-koordinatet til verteksen er lagret
+	 * @param newNormalIndex Indeks hvor tekstur-koordinatet til verteksen er lagret
+	 * @return En 
+	 */
 	private Vertex dealWithAlreadyProcessedVertex(Vertex previousVertex, int newTextureIndex, int newNormalIndex) {
 		if (previousVertex.hasSameTextureAndNormal(newTextureIndex, newNormalIndex)) {
 			indices.add(previousVertex.getIndex());
@@ -187,6 +249,9 @@ public class GeometryLoader {
 		}
 	}
 	
+	/**
+	 * Metode for å intitialisere arrayer
+	 */
 	private void initArrays(){
 		this.verticesArray = new float[vertices.size() * 3];
 		this.texturesArray = new float[vertices.size() * 2];
@@ -195,6 +260,9 @@ public class GeometryLoader {
 		this.weightsArray = new float[vertices.size() * 3];
 	}
 
+	/**
+	 * Fjerner vertekser som ikke brukes i meshen
+	 */
 	private void removeUnusedVertices() {
 		for (Vertex vertex : vertices) {
 			vertex.averageTangents();
@@ -203,6 +271,65 @@ public class GeometryLoader {
 				vertex.setNormalIndex(0);
 			}
 		}
+	}
+	
+	
+	private void loadMaxAndMin(float x, float y, float z){
+		
+		Vector3f vertex = new Vector3f(x,y,z);
+		
+		if(vecMax == null){
+			vecMax = new Vector3f(vertex.x, vertex.y, vertex.z);
+			vecMin = new Vector3f(vertex.x, vertex.y, vertex.z);
+		}
+		else{
+		if(vertex.x > vecMax.x)
+			vecMax.x = vertex.x;
+		if(vertex.y > vecMax.y)
+			vecMax.y = vertex.y;
+		if(vertex.z > vecMax.z)
+			vecMax.z = vertex.z;
+		
+		if(vertex.x < vecMin.x)
+			vecMin.x = vertex.x;
+		if(vertex.y < vecMin.y)
+			vecMin.y = vertex.y;
+		if(vertex.z < vecMin.z)
+			vecMin.z = vertex.z;
+		}
+		
+		
+		
+		
+		
+		
+		/*
+		
+		
+		Vector3f vec;
+		
+		for (Vertex vertex : vertices) {
+			
+			vec = vertex.getPosition();
+			
+			if(vec.x > vecMax.x)
+				vecMax.x = vec.x;
+			if(vec.y > vecMax.y)
+				vecMax.y = vec.y;
+			if(vec.z > vecMax.z)
+				vecMax.z = vec.z;
+			
+			if(vec.x < vecMin.x)
+				vecMin.x = vec.x;
+			if(vec.y < vecMin.y)
+				vecMin.y = vec.y;
+			if(vec.z < vecMin.z)
+				vecMin.z = vec.z;
+		}
+		
+*/
+		
+		
 	}
 	
 }

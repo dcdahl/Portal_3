@@ -1,6 +1,7 @@
 package models;
 
 import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 import animation.Animation;
 import animation.Animator;
@@ -11,6 +12,8 @@ public class AnimatedModel extends TexturedModel
 {
 	private final Joint rootJoint;
 	private final int jointCount;
+	private Vector3f vecMin;
+	private Vector3f vecMax;
 	
 	private final Animator animator;
 	

@@ -6,6 +6,8 @@ import java.util.List;
 import org.lwjgl.util.vector.Matrix4f;
 
 /**
+ * 
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
  * Contains the extracted data for a single joint in the model. This stores the
  * joint's index, name, and local bind transform.
  * 

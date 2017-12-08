@@ -21,6 +21,12 @@ public class PortalCamera extends Camera{
 	{
 		cameraNormal = tile.getNormalVector();
 	}
+	
+	public PortalCamera(WaterTile tile,Player player)
+	{
+		super(player);
+		cameraNormal = tile.getNormalVector();
+	}
 
 	public void rotate(float angle) {
 	/*
