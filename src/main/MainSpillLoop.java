@@ -78,7 +78,7 @@ public class MainSpillLoop
 		Loader loader = new Loader();
 		MasterRenderer renderer = new MasterRenderer(loader);
 		
-		createJumpBoxes(loader);
+		
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		List<AnimatedEntity> animatedObjects = new ArrayList<AnimatedEntity>();
 		List<Light> lights = createLights();
@@ -494,33 +494,6 @@ public class MainSpillLoop
 		}
 	}
 	
-	/**
-	 * Lager bokser som brukes til å vise konseptet Axis Align Bounding Box
-	 * @param loader Se {@link Loader}
-	 */
-	private static void createJumpBoxes(Loader loader){
-		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("orange"));
-		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
-		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse2Texture);
 
-		Vector3f startPosition = new Vector3f(175,0,100);
-		
-		int heightIncrement = 4;
-		int lenghIncrement = 20;
-		int zIncrement = 0;
-		float boxScale = 4f;
-		int amount = 10;
-		
-		for (int i = 0; i < amount; i++) {
-			staticObjects.add(new Entity(kasse2TexturedModel, startPosition, 0, 0, 0, boxScale));
-			startPosition.setX(startPosition.x + lenghIncrement);
-			startPosition.setY(startPosition.y + heightIncrement);
-			startPosition.setZ(startPosition.z + zIncrement);
-		}
-		
-		
-	}
-	
-	
 	
 }
