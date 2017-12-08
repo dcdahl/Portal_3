@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector4f;
 
 import entiies.Camera;
 import entiies.Light;
+import entiies.PortalCamera;
 import toolbox.Maths;
 
 public class StaticShader extends ShaderProgram{
@@ -100,7 +101,11 @@ public class StaticShader extends ShaderProgram{
 	}
 	
 	public void loadViewMatrix(Camera camera){
-		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
+		Matrix4f viewMatrix;
+		//if(camera.getClass().getName().equals(PortalCamera.class.getName()))
+			//viewMatrix = (Matrix4f) ((PortalCamera)camera).getView();
+		//else
+		viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
 	
