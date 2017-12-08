@@ -18,7 +18,7 @@ import toolbox.Maths;
 
 public class Terrain {
 
-	private static final float SIZE = 800;
+	private static final float SIZE = 1000;
 	private static final float MAX_HEIGHT = 40;
 	private static final float MIN_HEIGHT = -40;
 	private static final float MAX_PIXEL_COLOUR = 256*256*256;
@@ -43,7 +43,7 @@ public class Terrain {
 	}
 
 
-	// Copiert direkte fra ThinMatrix for å generere terrainet
+	// Kopiert direkte fra ThinMatrix for å generere terrenget. 
 	 private RawModel generateTerrain(Loader loader, String heightmap){
 		 
 		 BufferedImage image = null;

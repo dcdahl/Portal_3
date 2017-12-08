@@ -30,6 +30,7 @@ import dataStructures.MeshData;
 import dataStructures.SkeletonData;
 import entiies.*;
 import models.AnimatedModel;
+import models.BoundingBox;
 import models.RawModel;
 import models.TexturedModel;
 import render.DisplayManager;
@@ -50,8 +51,9 @@ import water.WaterShader;
 import water.WaterTile;
 import animation.*;
 
-public class MainSpillLoop {
-
+public class MainSpillLoop
+{
+	static List<Entity> staticObjects = new ArrayList<Entity>();
 	private static final int MAX_WEIGHTS = 3;
 	private static TerrainTexturePack texturePack;
 	private static TerrainTexture blendMap;
@@ -60,10 +62,10 @@ public class MainSpillLoop {
 	public static void main(String[] args) {
 
 		DisplayManager.createDisplay();
-
-		MasterRenderer renderer = new MasterRenderer();
 		Loader loader = new Loader();
-		List<Entity> staticObjects = new ArrayList<Entity>();
+		MasterRenderer renderer = new MasterRenderer(loader);
+		
+		
 		List<Terrain> terrains = new ArrayList<Terrain>();
 		List<AnimatedEntity> animatedObjects = new ArrayList<AnimatedEntity>();
 		List<Light> lights = createLights();
@@ -80,11 +82,12 @@ public class MainSpillLoop {
 		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
 		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
 		TexturedModel buildingtexturedModel = new TexturedModel(buildingRawModel, buildingTex);
-		Entity building = new Entity(buildingtexturedModel, new Vector3f(95, -2, 82), 0, 0, 0, 10f);
+		//Entity building = new Entity(buildingtexturedModel, new Vector3f(95, -2, 82), 0, 0, 0, 10f);
+		Entity building = new Entity(buildingtexturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 10f);
 		ModelTexture buildingspec = buildingtexturedModel.getTexture();
 		buildingspec.setShineDamper(500);
 		buildingspec.setReflectivity(0.4f);
-		staticObjects.add(building);
+		//staticObjects.add(building);
 
 		// Building
 		ModelTexture cubeTex = new ModelTexture(loader.loadTexture("wall_texture"));
@@ -108,41 +111,46 @@ public class MainSpillLoop {
 
 		// *************** Objects in front of sourcePortal
 		// *************************************************
+		float boxScale = 2f;
 		ModelTexture kasse1Texture = new ModelTexture(loader.loadTexture("orange"));
 		RawModel kasse1Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse1TexturedModel = new TexturedModel(kasse1Raw, kasse1Texture);
-		Entity kasse1 = new Entity(kasse1TexturedModel, new Vector3f(85, 0, 110), 0, 0, 0, 1f);
+		Entity kasse1 = new Entity(kasse1TexturedModel, new Vector3f(195,0,30), 0, 0, 0, 1f);
 		staticObjects.add(kasse1);
 /*
 		ModelTexture kasse2Texture = new ModelTexture(loader.loadTexture("blueXD"));
 		RawModel kasse2Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse2TexturedModel = new TexturedModel(kasse2Raw, kasse1Texture);
-		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(95, 0, 100), 0, 0, 0, 4f);
+		Entity kasse2 = new Entity(kasse2TexturedModel, new Vector3f(175,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse2);
-		*/
-		// *************** Objects in front of destination portal
-		// ******************************************************
-		ModelTexture kasse3Texture = new ModelTexture(loader.loadTexture("Moon"));
-		RawModel kasse3Raw = OBJLoader.loadObjModel("cube", loader);
-		TexturedModel kasse3TexturedModel = new TexturedModel(kasse3Raw, kasse3Texture);
-		Entity kasse3 = new Entity(kasse3TexturedModel, new Vector3f(165, 0, 20), 0, 0, 0, 3f);
+//*************** Objects in front of destination portal ******************************************************		
+		//ModelTexture kasse3Texture = new ModelTexture(loader.loadTexture("Moon"));
+		//RawModel kasse3Raw = OBJLoader.loadObjModel("cube", loader);
+		//TexturedModel kasse3TexturedModel = new TexturedModel(kasse3Raw, kasse3Texture);
+		Entity kasse3 = new Entity(kasse2TexturedModel, new Vector3f(155,0,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse3);
 
 		ModelTexture kasse4Texture = new ModelTexture(loader.loadTexture("jorda"));
 		RawModel kasse4Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse4TexturedModel = new TexturedModel(kasse4Raw, kasse4Texture);
-		Entity kasse4 = new Entity(kasse4TexturedModel, new Vector3f(195, 0, 4), 0, 0, 0, 6f);
+		Entity kasse4 = new Entity(kasse4TexturedModel, new Vector3f(135,4,30), 0, 0, 0, 4f);
 		staticObjects.add(kasse4);
-
+		
+		
+		Vector3f kassePosition = new Vector3f(115,8,30);
 		ModelTexture kasse5Texture = new ModelTexture(loader.loadTexture("jorda"));
 		RawModel kasse5Raw = OBJLoader.loadObjModel("cube", loader);
 		TexturedModel kasse5TexturedModel = new TexturedModel(kasse5Raw, kasse5Texture);
-		Entity kasse5 = new Entity(kasse5TexturedModel, new Vector3f(175, 0, 30), 0, 1, 0, 1f);
+		Entity kasse5 = new Entity(kasse5TexturedModel, kassePosition, 0, 1, 00, boxScale);
 		staticObjects.add(kasse5);
-
-		// ********************WATER AKA PORTALS N
-		// STUFF************************************************************************
-		WaterFrameBuffers fbos = new WaterFrameBuffers();
+		//Vector3f scaledMax = new Vector3f(kasse5Raw.getVecMax().x * boxScale,kasse5Raw.getVecMax().y * boxScale, kasse5Raw.getVecMax().z * boxScale);
+		//Vector3f scaledMin = (Vector3f) kasse5Raw.getVecMax().scale(boxScale);
+		//BoundingBox kasseBB = new BoundingBox(kasse5Raw.getVecMin(),scaledMax, kassePosition);
+		//BoundingBox.getAABBList().add(kasseBB);
+		
+		
+//********************WATER AKA PORTALS N STUFF************************************************************************
+		WaterFrameBuffers fbos = new WaterFrameBuffers();		
 		WaterShader waterShader = new WaterShader();
 		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), fbos);
 		List<WaterTile> waters = new ArrayList<WaterTile>();
@@ -166,6 +174,7 @@ public class MainSpillLoop {
 		AnimatedModelData animatedModelData = ColladaLoader.loadColladaModel(modelFile, MAX_WEIGHTS);
 		AnimationData animationData = ColladaLoader.loadColladaAnimation(modelFile);
 		MeshData mesh = animatedModelData.getMeshData();
+		
 		RawModel rawModel = loader.loadToVAO(mesh.getVertices(), mesh.getIndices(), mesh.getTextureCoords(),
 				mesh.getNormals(), mesh.getJointIds(), mesh.getVertexWeights());
 		TexturedModel texModel = new TexturedModel(rawModel, animatedTex);
@@ -173,18 +182,19 @@ public class MainSpillLoop {
 		Animation animation = loadAnimation(animationData);
 		Animator animator = new Animator(animatedModel);
 		animator.doAnimation(animation);
-
-		// AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new
-		// Vector3f(100, 0, 100), 0, 0, 0, 1);
-		// nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new
-		// Vector3f(0, 0, 0), 1, 0, 0, 1);
-		// AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new
-		// Vector3f(0, 0, 0), 1, 0, 0, 1);
-		// animatedObjects.add(newAnimatedEntity);
-		// animatedObjects.add(newAnimatedEntity2);
-		// animatedObjects.add(newAnimatedEntity3);
-
-		Player player = new Player(animatedModel, animator, animation, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+		
+		//AnimatedEntity newAnimatedEntity = new AnimatedEntity(animatedModel, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+				//nimatedEntity newAnimatedEntity2 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+				//AnimatedEntity newAnimatedEntity3 = new AnimatedEntity(animatedModel, new Vector3f(0, 0, 0), 1, 0, 0, 1);
+				//animatedObjects.add(newAnimatedEntity);
+				//animatedObjects.add(newAnimatedEntity2);
+				//animatedObjects.add(newAnimatedEntity3);
+		createAABBs();
+		
+		Vector3f playerPosition = new Vector3f(205, 0, 30);
+		BoundingBox playerBB = new BoundingBox(animatedModelData.getMeshData().getVecMin(), animatedModelData.getMeshData().getVecMax(), playerPosition);
+		System.out.println("Max = " + playerBB.getMax() + ", Min = ");
+		Player player = new Player(animatedModel,animator,animation , playerPosition, 0, -90, 0, 1, playerBB);
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
 		// ********** PORTAL CAMERAS *************************************************
@@ -202,8 +212,8 @@ public class MainSpillLoop {
 			// Vector3f old = camera.getPosition();
 			// Aktiverer bevegelse av kamera
 			camera.move();
-			destinationPortalCamera.move();
-			sourcePortalCamera.move();
+			
+			//Vector3f newVec = camera.getPosition();
 
 			// Spillerbevegelse
 			player.move(terrain);
@@ -273,9 +283,14 @@ public class MainSpillLoop {
 			// xd.invertPitch();
 			ok.unbindCurrentFrameBuffer();
 
-			// *******************************************************************************************
-			// TODO clipplane for terrain
-
+			
+			for(BoundingBox aabb: BoundingBox.getAABBList())
+				playerBB.intersects(aabb);
+			
+		
+//*******************************************************************************************
+			// TODO clipplane for terrain 
+			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
@@ -428,7 +443,32 @@ public class MainSpillLoop {
 		lights.add(new Light(tre, Light.ORANGE, Light.STERK));
 
 		return lights;
-
+		
 	}
 
+	
+	
+	private static void createAABBs(){
+		
+		// Lager AABB basert p� posisjonene og st�rrelses skalaen. 
+		for (Entity ent : staticObjects) {
+			float scale = ent.getScale();
+			Vector3f scaledMax = new Vector3f(
+					ent.getModel().getRawModel().getVecMax().x * scale, 
+					ent.getModel().getRawModel().getVecMax().y * scale, 
+					ent.getModel().getRawModel().getVecMax().z * scale);
+			Vector3f scaledMin = new Vector3f(
+					ent.getModel().getRawModel().getVecMin().x * scale, 
+					ent.getModel().getRawModel().getVecMin().y * scale, 
+					ent.getModel().getRawModel().getVecMin().z * scale);
+			
+			// Adderer inn verdensposisjonen med maks/min punktene for � f� korrekte punkter i verden. 
+			Vector3f Max = Vector3f.add(scaledMax, ent.getPosition(), null);
+			Vector3f Min = Vector3f.add(scaledMin, ent.getPosition(), null);
+			
+			BoundingBox aabb = new BoundingBox(Min,Max, ent.getPosition());
+			BoundingBox.getAABBList().add(aabb);
+		}
+	}
+	
 }

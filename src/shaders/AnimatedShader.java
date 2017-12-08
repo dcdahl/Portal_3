@@ -147,7 +147,7 @@ public class AnimatedShader extends ShaderProgram
 		{
 			int location_matrixArrayElement = super.getUniformLocation("jointTransforms[" + i + "]");
 			super.loadMatrix(location_matrixArrayElement, matrices[i]);
-			System.out.println(i);
+			//System.out.println(i);
 		}
 	}
 
