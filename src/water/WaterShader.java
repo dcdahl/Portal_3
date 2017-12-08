@@ -4,6 +4,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import shaders.ShaderProgram;
 import toolbox.Maths;
 import entiies.Camera;
+import entiies.Light;
  
 public class WaterShader extends ShaderProgram {
  
@@ -13,7 +14,14 @@ public class WaterShader extends ShaderProgram {
     private int location_modelMatrix;
     private int location_viewMatrix;
     private int location_projectionMatrix;
-    private int location_reflectionTexture;
+    private int location_reflectTex;
+    private int location_refractTex;
+    private int location_dudvmap;
+    private int location_move;
+    private int location_cameraPos;
+    private int location_normalMap;
+    private int location_lightColor;
+    private int location_lightPos;
  
     public WaterShader() {
         super(VERTEX_FILE, FRAGMENT_FILE);
@@ -29,22 +37,42 @@ public class WaterShader extends ShaderProgram {
         location_projectionMatrix = getUniformLocation("projectionMatrix");
         location_viewMatrix = getUniformLocation("viewMatrix");
         location_modelMatrix = getUniformLocation("modelMatrix");
-        location_reflectionTexture = getUniformLocation("reflectionTexture");
-        
+        location_reflectTex = getUniformLocation("reflectTex");
+        location_refractTex = getUniformLocation("refractTex");
+        location_dudvmap = getUniformLocation("DuDvMap");
+        location_move = getUniformLocation("moveFactor");
+        location_cameraPos = getUniformLocation("cameraPos");
+        location_normalMap = getUniformLocation("normalMap");
+        location_lightColor = getUniformLocation("lightColor");
+        location_lightPos = getUniformLocation("lightPos");
+    }
+ 
+    //Laster opp en int til sampler2Dene som ligger i fragmentshaderen
+    //Her setter vi hvilken textureunit hver sampler skal sample fra
+    public void connectTextureUnits() {
+    	super.loadInt(location_reflectTex, 0);
+    	super.loadInt(location_refractTex, 1);
+    	super.loadInt(location_dudvmap, 2);
+    	super.loadInt(location_normalMap, 3);
     }
     
-    public void connectTextureUnits() {
-    	super.loadInt(location_reflectionTexture, 0);
+    public void loadMoveFactor(float factor) {
+    	super.loadFloat(location_move, factor);
     }
-  
+    
+    public void loadLight(Light sun) {
+    	super.loadVector(location_lightColor, sun.getColour());
+    	super.loadVector(location_lightPos, sun.getPosition());
+    }
+    
     public void loadProjectionMatrix(Matrix4f projection) {
         loadMatrix(location_projectionMatrix, projection);
     }
      
     public void loadViewMatrix(Camera camera){
-    	
         Matrix4f viewMatrix = Maths.createViewMatrix(camera);
         loadMatrix(location_viewMatrix, viewMatrix);
+        super.loadVector(location_cameraPos, camera.getPosition());
     }
  
     public void loadModelMatrix(Matrix4f modelMatrix){

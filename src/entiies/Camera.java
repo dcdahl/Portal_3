@@ -58,7 +58,7 @@ public class Camera {
 	
 
 
-	private void calculateCameraPosition(float horizontalDistance, float verticalDistance){
+	public void calculateCameraPosition(float horizontalDistance, float verticalDistance){
 		
 		
 		
@@ -74,10 +74,9 @@ public class Camera {
 		//position.y = player.getPosition().y + verticalDistance;
 		position.y = getFaceView() + verticalDistance;
 		
-
-		
 	}
 
+	
 	
 	
 	private float calculateHorizontalDistance(){
@@ -123,6 +122,8 @@ public class Camera {
 	}
 	
 	
+	
+	
 	private void calculateZoom(){
 		float zoomLevel = Mouse.getDWheel() * MOUSE_SCROLL_SENSETIVITY;
 		float zoom = distanceFromPlayer -= zoomLevel;
@@ -134,13 +135,14 @@ public class Camera {
 			distanceFromPlayer -= zoomLevel;
 	}
 		
-	private void resetCameraToDefaultSettings(){
+	public void resetCameraToDefaultSettings(){
 		distanceFromPlayer = 50;
 		angleAroundPlayer = 0;
 		pitch = 10;
 		yaw = 0;
 		
 	}
+	
 	
 	
 	

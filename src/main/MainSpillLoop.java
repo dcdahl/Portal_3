@@ -32,6 +32,10 @@ import entiies.*;
 import models.AnimatedModel;
 import models.RawModel;
 import models.TexturedModel;
+import portal.PortalFrameBuffers;
+import portal.PortalRenderer;
+import portal.PortalShader;
+import portal.PortalTile;
 import render.DisplayManager;
 import render.Loader;
 import render.MasterRenderer;
@@ -75,7 +79,9 @@ public class MainSpillLoop {
 		// ModelTexture(loader.loadTexture("grass")));
 		terrains.add(terrain);
 		// terrains.add(terrain2);
-
+		
+	
+		
 		// Building
 		ModelTexture buildingTex = new ModelTexture(loader.loadTexture("wall_texture"));
 		RawModel buildingRawModel = OBJLoader.loadObjModel("cube_uvmapped", loader);
@@ -100,11 +106,11 @@ public class MainSpillLoop {
 		ModelTexture superTex = new ModelTexture(loader.loadTexture("Superman_Diff"));
 		RawModel superRawModel = OBJLoader.loadObjModel("superman", loader);
 		TexturedModel superMantexturedModel = new TexturedModel(superRawModel, superTex);
-		Entity superMan = new Entity(superMantexturedModel, new Vector3f(0, 0, 10), 0, 0, 0, 10f);
+		Entity superMan = new Entity(superMantexturedModel, new Vector3f(235, -4, 160), 0, 270, 0, 2f);
 		ModelTexture superManspec = superMantexturedModel.getTexture();
 		superManspec.setShineDamper(500);
 		superManspec.setReflectivity(0.4f);
-		// staticObjects.add(superMan);
+		 staticObjects.add(superMan);
 
 		// *************** Objects in front of sourcePortal
 		// *************************************************
@@ -139,21 +145,20 @@ public class MainSpillLoop {
 		Entity kasse5 = new Entity(kasse5TexturedModel, new Vector3f(175, 0, 30), 0, 1, 0, 1f);
 		staticObjects.add(kasse5);
 
-		// ********************WATER AKA PORTALS N
-		// STUFF************************************************************************
-		WaterFrameBuffers fbos = new WaterFrameBuffers();
-		WaterShader waterShader = new WaterShader();
-		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), fbos);
-		List<WaterTile> waters = new ArrayList<WaterTile>();
-		WaterTile sourcePortal = new WaterTile(85, 125, 0);
-		waters.add(sourcePortal);
+		// ********************PORTALS ***************************************************************
+		PortalFrameBuffers portal1FBO = new PortalFrameBuffers();
+		PortalShader portal1Shader = new PortalShader();
+		PortalRenderer portal1Renderer = new PortalRenderer(loader, portal1Shader, renderer.getProjectionMatrix(), portal1FBO);
+		List<PortalTile> portal1List = new ArrayList<PortalTile>();
+		PortalTile sourcePortal = new PortalTile(85, 125, 0);
+		portal1List.add(sourcePortal);
 
-		WaterFrameBuffers ok = new WaterFrameBuffers();
-		WaterShader okShader = new WaterShader();
-		WaterRenderer okRenderer = new WaterRenderer(loader, okShader, renderer.getProjectionMatrix(), ok);
-		List<WaterTile> oks = new ArrayList<WaterTile>();
-		WaterTile destPortal = new WaterTile(180, 50, 0);
-		oks.add(destPortal);
+		PortalFrameBuffers portal2FBO = new PortalFrameBuffers();
+		PortalShader portal2Shader = new PortalShader();
+		PortalRenderer portal2Renderer = new PortalRenderer(loader, portal2Shader, renderer.getProjectionMatrix(), portal2FBO);
+		List<PortalTile> portal2List = new ArrayList<PortalTile>();
+		PortalTile destPortal = new PortalTile(180, 50, 0);
+		portal2List.add(destPortal);
 		// **************************************************************************************************
 		// Animatert figur
 		ModelTexture animatedTex = new ModelTexture(loader.loadTexture("diffuse"));
@@ -183,23 +188,33 @@ public class MainSpillLoop {
 		// animatedObjects.add(newAnimatedEntity2);
 		// animatedObjects.add(newAnimatedEntity3);
 
-		Player player = new Player(animatedModel, animator, animation, new Vector3f(100, 0, 100), 0, 0, 0, 1);
+		Player player = new Player(animatedModel, animator, animation, new Vector3f(200, 0, 125), 0, 0, 0, 1);
 		animatedObjects.add(player);
 		Camera camera = new Camera(player);
 		// ********** PORTAL CAMERAS *************************************************
 		PortalCamera sourcePortalCamera = new PortalCamera(destPortal);
 		PortalCamera destinationPortalCamera = new PortalCamera(sourcePortal);
-
+		
+		
 		// ***************************************************************************
 		MousePicker picker = new MousePicker(renderer.getProjectionMatrix(), camera);
 		Vector3f sourcePortalPosition = new Vector3f(sourcePortal.getX(), 1f, sourcePortal.getZ() + 10);
-		Vector3f entryPortalPosition = new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10);
+		Vector3f destPortalPosition = new Vector3f(destPortal.getX(), 1f, destPortal.getZ() + 10);
 
+		
+		//********* WATER ************************************************************
+		WaterFrameBuffers waterFbos = new WaterFrameBuffers();
+		WaterShader waterShader = new WaterShader();
+		WaterRenderer waterRenderer = new WaterRenderer(loader, waterShader, renderer.getProjectionMatrix(), waterFbos);
+		List<WaterTile> waterTiles = new ArrayList<>();
+		WaterTile tile = new WaterTile(190, 180, -10);
+		waterTiles.add(tile);
+		Light sun = new Light(new Vector3f(190, 180,50), new Vector3f(Light.HVIT), new Vector3f(Light.SVAK));
+		
 		while (!Display.isCloseRequested()) {
 			// Vector3f old = camera.getPosition();
 			// Aktiverer bevegelse av kamera
 			camera.move();
-
 			// Spillerbevegelse
 			player.move(terrain);
 
@@ -210,22 +225,24 @@ public class MainSpillLoop {
 			else {
 				player.getAnimator().resetAnimation();
 			}
+			
+			//Vi bruker kun 1 clipping-plane så vi bruker nr 0 
+			//Enabler bruke av gl_ClipDistance så vi kan kalkulere og bruke clipping planes i koden vår
 			GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
 
 			// **********************PORTALS
-			// ********************************************************
-			fbos.bindReflectionFrameBuffer();
-
-			float angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
+			portal1FBO.bindReflectionFrameBuffer();
+			float angle = Vector3f.angle(camera.getPosition(), destPortalPosition);
 			//change.normalise();
 
 			
 			//entryPortalPosition = SetPortalPosition(camera,destinationPortalCamera.getCameraNormal());
 			
-			destinationPortalCamera.setPosition(entryPortalPosition);
-			destinationPortalCamera.rotate(angle);
-			//destinationPortalCamera.setPitch(0);
-
+			destinationPortalCamera.setPosition(destPortalPosition);
+			destinationPortalCamera.setRoll(0);
+			destinationPortalCamera.setPitch(0);
+			destinationPortalCamera.setYaw(0);
+			
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
@@ -235,24 +252,22 @@ public class MainSpillLoop {
 
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
+			
+			//Enkel sjekk for å teleportere spilleren til den andre portalen når figuren er innenfor portalframen
+			if(player.getPosition().x < 85 + 20 && player.getPosition().x > 85 - 20
+					&& player.getPosition().z > 120 && player.getPosition().z < 130) {
+				Vector3f newPost = new Vector3f(destPortalPosition.x + 12, 0, destPortalPosition.z - 15);
+				player.setPosition(newPost);
+				player.increaseRotation(0, 180, 0);
+			}
 
 			renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0, sourcePortal.getHeight()));
-			// renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0,
-			// destPortal.getHeight()));
-			// xd.invertPitch();
-			fbos.unbindCurrentFrameBuffer();
+			portal1FBO.unbindCurrentFrameBuffer();
 
-			ok.bindReflectionFrameBuffer();
-
-			//change = Vector3f.sub(camera.getPosition(), sourcePortalPosition, null);
-			angle = Vector3f.angle(camera.getPosition(), entryPortalPosition);
-			//change.normalise();
-			//sourcePortalPosition.x += change.x;
-			//sourcePortalPosition.y += change.y;
-			
+			portal2FBO.bindReflectionFrameBuffer();
+			angle = Vector3f.angle(camera.getPosition(), destPortalPosition);
 			sourcePortalCamera.setPosition(sourcePortalPosition);
 			sourcePortalCamera.rotate(angle);
-			//sourcePortalCamera.setPitch(0);
 
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
@@ -263,16 +278,56 @@ public class MainSpillLoop {
 
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
-
+			
+			//Enkel sjekk for å teleportere spilleren til den andre portalen når figuren er innenfor portalframen
+			if(player.getPosition().x < 180  + 20 && player.getPosition().x > 180 - 20  
+					&& player.getPosition().z > 50 && player.getPosition().z < 60) {
+				
+				Vector3f newPost = new Vector3f(sourcePortalPosition.x + 12, 0, sourcePortalPosition.z - 15);
+				player.setPosition(newPost);
+				player.increaseRotation(0, 180, 0);	
+			}
 			renderer.render(lights, sourcePortalCamera, new Vector4f(1, 0, 0, destPortal.getHeight()));
-			// renderer.render(lights, destinationPortalCamera, new Vector4f(1, 0, 0,
-			// destPortal.getHeight()));
-			// xd.invertPitch();
-			ok.unbindCurrentFrameBuffer();
-
+			portal2FBO.unbindCurrentFrameBuffer();
+			
+			//**************** WATER RENDERING ***********************************************************
+			//render relfection
+			waterFbos.bindReflectionFBO();
+			//Kalkulerer distansen vi må flytte kameraet. Vi vil flyttet kameraet under vannet og rendre refleksjonen fra denne posisjonen
+			float distance = 2 * (-camera.getPosition().y + tile.getHeight());
+			//Setter kameraet i denne høyden
+			camera.getPosition().y -= distance;
+			//Inverterer pitchen.
+			//Hvis kameraet ser nedover når vi flytter den ned, vil vi nå se oppover når kameraet er under vannet. 
+			camera.invertPitch();
+			// Rendrer objektene
+			for (Entity entitys : staticObjects)
+				renderer.processEntity(entitys);
+			// Render terreng
+			for (Terrain terr : terrains)
+				renderer.processTerrain(terr);
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
+			//Rendrer alt over vann overflaten med clip plane som peker oppover, med distanse fra utgangspunktet som høyden av "water tilen"
+			renderer.render(lights, camera, new Vector4f(0, 1, 0, -tile.getHeight()));
+			//Resetter høyde og pitch på kameraet når vi er ferdig å rendre refleksjon
+			camera.getPosition().y += distance;
+			camera.invertPitch();
+			//render refraction
+			waterFbos.bindRefractionFBO();
+			// Rendrer objektene
+			for (Entity entitys : staticObjects)
+				renderer.processEntity(entitys);
+			// Render terreng
+			for (Terrain terr : terrains)
+				renderer.processTerrain(terr);
+			for (AnimatedEntity animatedEntity : animatedObjects)
+				renderer.processAnimatedEntity(animatedEntity);
+			//Rendrer alt UNDER vann overflaten for rekfraksjon så clip planet peker nedover 
+			renderer.render(lights, camera, new Vector4f(0, -1, 0, tile.getHeight()));
+			
+			waterFbos.unbindFBO();
 			// *******************************************************************************************
-			// TODO clipplane for terrain
-
 			// Rendrer objektene
 			for (Entity entitys : staticObjects)
 				renderer.processEntity(entitys);
@@ -284,17 +339,21 @@ public class MainSpillLoop {
 			for (AnimatedEntity animatedEntity : animatedObjects)
 				renderer.processAnimatedEntity(animatedEntity);
 
+			//Vi setter clip planet til noe usannsylig høyt, siden glDisable(GL_CLIP_DISTANCE0) har
+			//en risiko å bli ignorert av noen drivere og jeg er ikke villig til å ta den risken. 
+			//I dette tilfellet vil rendre ALT i scenen/verden
 			renderer.render(lights, camera, new Vector4f(0, -1, 0, 150000000));
-
-			waterRenderer.render(waters, camera);
-
-			okRenderer.render(oks, camera);
+			waterRenderer.render(waterTiles, camera, sun);
+			portal1Renderer.render(portal1List, camera);
+			portal2Renderer.render(portal2List, camera);
 
 			DisplayManager.updateDisplay();
 		}
-		fbos.cleanUp();
-		ok.cleanUp();
+		waterFbos.cleanUp();
 		waterShader.cleanUp();
+		portal1FBO.cleanUp();
+		portal2FBO.cleanUp();
+		portal1Shader.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 

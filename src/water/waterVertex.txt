@@ -2,17 +2,38 @@
 
 in vec2 position;
 
+//clipspace koordinate for en pixel
 out vec4 clipSpace;
+out vec2 textureCoords;
+//3D vektoren som peker fra verteksen til kameraet.
+out vec3 toCamVector;
+//3D vektoren som peker fra lyset til vannet
+out vec3 fromLightVector;
 
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+//Kamerets posisjon for kalkulering av fresnel effekt
+uniform vec3 cameraPos;
+uniform vec3 lightPos;
 
+const float tiling = 6.0;
 
 void main(void) {
 
-	clipSpace = projectionMatrix * viewMatrix * modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
-	
+	vec4 worldPos = modelMatrix * vec4(position.x, 0.0, position.y, 1.0);
+
+	//Finner clipspace koordinat
+	clipSpace = projectionMatrix * viewMatrix * worldPos;
+
 	gl_Position = clipSpace;
+	
+	textureCoords = vec2(position.x/2.0 + 0.5, position.y/2.0 + 0.5) * tiling;
+	
+	//Kameraets posisjon minus vertex posisjonen
+	toCamVector = cameraPos - worldPos.xyz;
+	
+	//vertex posisojnen minus lys posisjonen
+	fromLightVector = worldPos.xyz - lightPos;
  
 }

@@ -4,7 +4,7 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import animation.Quaternion;
-import water.WaterTile;
+import portal.PortalTile;
 
 public class PortalCamera extends Camera{
 
@@ -17,7 +17,7 @@ public class PortalCamera extends Camera{
 	}
 	
 	
-	public PortalCamera(WaterTile tile)
+	public PortalCamera(PortalTile tile)
 	{
 		cameraNormal = tile.getNormalVector();
 	}

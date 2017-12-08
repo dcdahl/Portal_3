@@ -1,19 +1,75 @@
 #version 400 core
 
-in vec4 clipSpace; 
 
 out vec4 out_Color;
 
-uniform sampler2D reflectionTexture;
-uniform sampler2D refractionTexture;
+in vec4 clipSpace;
+in vec2 textureCoords;
+in vec3 toCamVector;
+in vec3 fromLightVector;
+
+//Samplers for textures/maps
+uniform sampler2D reflectTex;
+uniform sampler2D refractTex;
+uniform sampler2D DuDvMap;
+uniform sampler2D normalMap;
+uniform vec3 lightColor;
+
+//Offset hvor vi sampler dudv mappet 
+//Vi endrer offsettet underveis for å skape illusjonen at ripplene/forvrengelsen beveger seg i vannet. 
+uniform float moveFactor;
+
+//Hvor sterkt vi forvrenger koordinatene. 
+const float distortStrength = 0.02;
+const float shineDamper = 20.0;
+const float reflectivity = 0.6;
 
 void main(void) {
 
-	vec2 ndc = (clipSpace.xy / clipSpace.w) / 2.0 + 0.5;
-	vec2 reflectTexCoords = vec2(ndc.x, ndc.y);
+	//Konvertere clipspacen til normalised device space
+	//perspective division: xyz/w
+	//Dividerer med 2.0 og adderer 0.5 for å gjøre om koordinatsystemet
+	vec2 ndc = (clipSpace.xy/clipSpace.w)/2.0 + 0.5;
 
-	vec4 reflectionColour = texture(reflectionTexture, reflectTexCoords);
+	vec2 reflectTexCoords = vec2(ndc.x, -ndc.y);
+	vec2 refractTexCoords = vec2(ndc.x, ndc.y);
 	
+	//Sampler DUDVmappet og setter verdiene i mappet til å være mellom -1 og 1.
+	//Legger til movefaktoren til x koordinatene får skape ripler i vannet
+	vec2 distort = (texture(DuDvMap, vec2(textureCoords.x + moveFactor, textureCoords.y )).rg * 2.0 -1.0) * distortStrength;
+	//Enda en distort som beveger seg i en annen retning
+	vec2 distort2 = (texture(DuDvMap, vec2(-textureCoords.x + moveFactor, textureCoords.y + moveFactor)).rg * 2.0 -1.0) * distortStrength;
+	vec2 totalDistort = distort + distort2;
+	
+	
+	//Forvrenger refraction og reflection koordionatene ved å legge til distort verdien fra dudv mappet
+	refractTexCoords += totalDistort;
+	reflectTexCoords += totalDistort;
+	
+	vec4 reflectColor = texture(reflectTex, reflectTexCoords);
+	vec4 refractColour = texture(refractTex, refractTexCoords);
 
-	out_Color = reflectionColour;
+	//Normaliserer, dotprodukt trenger unitvectors
+	vec3 viewVector = normalize(toCamVector);
+	//Kalkulerer hvor mye vannets y normal og vektoren som peker mot kameraet peker i sammen retning
+	float refractFactor = dot(viewVector, vec3(0.0,1.0,0.0));
+	//Endrer hvor reflekterende vannet er. Høyere nummer = mer reflektivt
+	refractFactor = pow(refractFactor, 0.5);
+	
+	//Sampler normal mappet for å få fargen
+	vec4 normalMapColor = texture(normalMap,distort);
+	//Finner normalen basert på fargen til normalen
+	vec3 normal = vec3(normalMapColor.r * 2.0 - 1, normalMapColor.b, normalMapColor.g * 2.0 -1.0);
+	normal = normalize(normal);
+	
+	vec3 reflectedLight = reflect(normalize(fromLightVector), normal);
+	float specular = max(dot(reflectedLight, viewVector), 0.0);
+	specular = pow(specular, shineDamper);
+	vec3 specularHighLights = lightColor * specular * reflectivity;
+	
+	//Mikser ratioen med refractfaktorene slik at det blir mixet forskjellig basert på hvor man peker kameraet e.g fresnel effekt
+	//Siden refractFactor endrer seg basert på kameraets posisjon i forhold til surface normalen til vannet.
+	out_Color = mix(reflectColor, refractColour, refractFactor);
+	out_Color = mix(out_Color, vec4(0.0, 0.3,0.5,1.0), 0.2) + vec4(specularHighLights, 0.0);
+	
 }
