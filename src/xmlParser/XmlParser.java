@@ -6,6 +6,8 @@ import java.util.regex.Pattern;
 
 import colladaLoader.*;
 /**
+ * Laget av ThinMatrix ( Se <a href="https://www.youtube.com/watch?v=z0jb1OBw45I">ThinMatrix, Skeleton animation video 4</a>)
+ * 
  * Reads an XML file and stores all the data in {@link XmlNode} objects,
  * allowing for easy access to the data contained in the XML file.
  * 
